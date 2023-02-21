@@ -31,8 +31,8 @@ public enum Token {
     TK_CLOSE_PAREN ("\\)"),
     TK_COLON (":"),
     TK_COMMA (","),
-    TK_DOT ("."),
-    TK_ASSIGN (":="),
+    TK_DOT ("\\."),
+    TK_ASSIGN ("="),
 
     // Operators
     TK_PLUS ("\\+"),
