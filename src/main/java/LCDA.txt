@@ -2,11 +2,11 @@ class LCDAlgorithm is
     var a: Integer
     var b: Integer
 
-   method calculate(a: Integer, b: Integer) returns Integer is
+    method calculate(a: Integer, b: Integer) returns Integer is
         var x: Integer
         x := a
         var y: Integer
-        y := b 
+        y := b
         while y != 0 loop
             var r: Integer
             r := x mod y
