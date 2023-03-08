@@ -1,18 +1,19 @@
 import java.util.List;
 
 public class SyntaxAnalyser {
-    private ProgramTree tree;
-    private Lexer lexer;
+    private final ProgramTree tree;
+    private final Lexer lexer;
 
     public SyntaxAnalyser(Lexer lexer) {
         this.lexer = lexer;
         tree = new ProgramTree(null, SyntaxComponent.PROGRAM);
     }
 
-    public void makeTree(List<Token> tokens) throws SyntaxError, LexerError {
-        for (Token token : tokens) {
-
+    public ProgramTree makeTree() throws SyntaxError, LexerError {
+        while (lexer.currentPair() != null) {
+            tree.addChild(parseClass());
         }
+        return tree;
     }
 
     private void checkToken(ProgramTree currentNode, TokenLexemaPair pair, Token token) {
@@ -25,8 +26,8 @@ public class SyntaxAnalyser {
     private void checkToken(ProgramTree currentNode, TokenLexemaPair pair,
                              Token[] tokens) {
         for (Token token: tokens) {
-            checkToken(currentNode, pair, token);
             pair = lexer.nextPair();
+            checkToken(currentNode, pair, token);
         }
     }
 
@@ -117,7 +118,7 @@ public class SyntaxAnalyser {
 
     private ProgramTree parseVariableDeclaration() {
         var currentNode = new ProgramTree(null, SyntaxComponent.VARIABLE_DECLARATION);
-        TokenLexemaPair pair = lexer.nextPair();
+        TokenLexemaPair pair = null;
 
         Token [] tokens = {Token.TK_VAR, Token.TK_IDENTIFIER, Token.TK_COLON};
         checkToken(currentNode, pair, tokens);
@@ -128,17 +129,85 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseType() {
+        TokenLexemaPair pair = lexer.nextPair();
 
+        if (pair.getToken() != Token.TK_INTEGER &&
+                pair.getToken() != Token.TK_REAL &&
+                pair.getToken() != Token.TK_ARRAY)
+            throw new SyntaxError(pair.getLexema());
+
+        return new ProgramTree(pair, null);
     }
 
     private ProgramTree parseMethodDeclaration() {
         var currentNode = new ProgramTree(null, SyntaxComponent.METHOD_DECALRATION);
+        TokenLexemaPair pair = null;
 
+        Token [] tokens = {Token.TK_METHOD, Token.TK_IDENTIFIER, Token.TK_OPEN_PAREN};
+        checkToken(currentNode, pair, tokens);
+
+        pair = lexer.currentPair();
+
+        if (pair.getToken() != Token.TK_CLOSE_PAREN) {
+            currentNode.addChild(parseParameters());
+        }
+
+        pair = lexer.nextPair();
+        checkToken(currentNode, pair, Token.TK_CLOSE_PAREN);
+
+        if (lexer.currentPair().getToken() == Token.TK_COLON) {
+            checkToken(currentNode, pair, Token.TK_COLON);
+            currentNode.addChild(parseType());
+        }
+
+        pair = lexer.nextPair();
+        checkToken(currentNode, pair, Token.TK_IS);
+
+        currentNode.addChild(parseStatements());
+
+        pair = lexer.nextPair();
+        checkToken(currentNode, pair, Token.TK_END);
+
+        return currentNode;
+    }
+
+    private ProgramTree parseParameters() {
+        var currentNode = new ProgramTree(null, SyntaxComponent.PARAMETERS);
+        TokenLexemaPair pair = lexer.currentPair();
+
+        while (pair.getToken() != Token.TK_CLOSE_PAREN) {
+            currentNode.addChild(parseParameter());
+
+            pair = lexer.currentPair();
+
+            if (pair.getToken() == Token.TK_COMMA) {
+                currentNode.addChild(new ProgramTree(pair, null));
+                pair = lexer.nextPair();
+            }
+        }
+
+        return currentNode;
+    }
+
+    public ProgramTree parseParameter() {
+        var currentNode = new ProgramTree(null, SyntaxComponent.VARIABLE_DECLARATION);
+        TokenLexemaPair pair = null;
+
+        Token [] tokens = {Token.TK_IDENTIFIER, Token.TK_COLON};
+        checkToken(currentNode, pair, tokens);
+
+        currentNode.addChild(parseType());
+
+        return currentNode;
+    }
+
+    private ProgramTree parseStatements() {
+        return null;
     }
 
     private ProgramTree parseConstructorDeclaration() {
         var currentNode = new ProgramTree(null, SyntaxComponent.CONSTRUCTOR_DECLARATION);
-
+        return null;
     }
 
 }

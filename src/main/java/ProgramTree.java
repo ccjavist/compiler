@@ -38,4 +38,26 @@ public class ProgramTree {
     public TokenLexemaPair getPair() {
         return pair;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        if (pair != null) {
+            result.append("{" + pair.getToken() + " : " + pair.getLexema() + "} ");
+        } else if (component != null) {
+            result.append(component + " ");
+        } else
+            result.append("INVALID_NODE ");
+
+        if (!children.isEmpty()) {
+            result.append(":: Children:\n[");
+
+            for (ProgramTree child: children)
+                result.append(child.toString());
+
+            result.append("]");
+        }
+
+        return result.toString();
+    }
 }

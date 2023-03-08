@@ -1,0 +1,4 @@
+class LCDAlgorithm is
+    var a: Integer
+    var b: Real
+end
