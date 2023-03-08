@@ -111,14 +111,18 @@ public class Lexer {
             var result = new TokenLexemaPair(currentToken(), currentLexema());
             moveAhead();
             return result;
-        } else
+        } else if (!errorMessage.equals(""))
             throw new LexerError(errorMessage);
+        else
+            return null;
     }
 
     public TokenLexemaPair currentPair() throws LexerError {
         if (!isExausthed()) {
             return new TokenLexemaPair(currentToken(), currentLexema());
-        } else
+        } else if (!errorMessage.equals(""))
             throw new LexerError(errorMessage);
+        else
+            return null;
     }
 }

@@ -2,7 +2,7 @@ class LCDAlgorithm is
     var a: Integer
     var b: Integer
 
-    method calculate(a: Integer, b: Integer) returns Integer is
+    method calculate(a: Integer, b: Integer) : Integer is
         var x: Integer
         x := a
         var y: Integer
