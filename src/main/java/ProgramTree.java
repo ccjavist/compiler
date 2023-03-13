@@ -29,7 +29,7 @@ public class ProgramTree {
         return children.size() != 0;
     }
 
-    public NodeValue getComponent() {
+    public NodeValue getValue() {
         return value;
     }
 

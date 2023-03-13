@@ -1,4 +1,18 @@
 class LCDAlgorithm is
     var a: Integer
-    var b: Real
+    var b: Integer
+
+    method calculate(a: Integer, b: Integer) : Integer is
+        var x: Integer
+        x := a
+        var y: Integer
+        y := b
+        while y + 0 loop
+            var r: Integer
+            r := x mod y
+            x := y
+            y := r
+        end
+        return (a*b) / x
+    end
 end
