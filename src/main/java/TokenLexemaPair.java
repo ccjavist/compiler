@@ -1,4 +1,4 @@
-public class TokenLexemaPair {
+public class TokenLexemaPair implements NodeValue {
     private Token token;
     private String lexema;
 

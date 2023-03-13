@@ -1,14 +1,12 @@
 import java.util.ArrayList;
 
 public class ProgramTree {
-    private final TokenLexemaPair pair;
+    private final NodeValue value;
     private final ArrayList<ProgramTree> children;
-    private final SyntaxComponent component;
 
-    public ProgramTree (TokenLexemaPair pair, SyntaxComponent component) {
-        this.pair = pair;
+    public ProgramTree (NodeValue value) {
         this.children = new ArrayList<>();
-        this.component = component;
+        this.value = value;
     }
 
     public ProgramTree getChild(int n) {
@@ -31,21 +29,17 @@ public class ProgramTree {
         return children.size() != 0;
     }
 
-    public SyntaxComponent getComponent() {
-        return component;
-    }
-
-    public TokenLexemaPair getPair() {
-        return pair;
+    public NodeValue getComponent() {
+        return value;
     }
 
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        if (pair != null) {
-            result.append("{" + pair.getToken() + " : " + pair.getLexema() + "} ");
-        } else if (component != null) {
-            result.append(component + " ");
+        if (value instanceof TokenLexemaPair pair) {
+            result.append("{").append(pair.getToken()).append(" : ").append(pair.getLexema()).append("} ");
+        } else if (value instanceof SyntaxComponent component) {
+            result.append(component).append(" ");
         } else
             result.append("INVALID_NODE ");
 

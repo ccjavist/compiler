@@ -6,7 +6,7 @@ public class SyntaxAnalyser {
 
     public SyntaxAnalyser(Lexer lexer) {
         this.lexer = lexer;
-        tree = new ProgramTree(null, SyntaxComponent.PROGRAM);
+        tree = new ProgramTree(SyntaxComponent.PROGRAM);
     }
 
     public ProgramTree makeTree() throws SyntaxError, LexerError {
@@ -20,7 +20,7 @@ public class SyntaxAnalyser {
         if (pair.getToken() != token)
             throw new SyntaxError(pair.getLexema());
 
-        currentNode.addChild(new ProgramTree(pair, null));
+        currentNode.addChild(new ProgramTree(pair));
     }
 
     private void checkToken(ProgramTree currentNode, TokenLexemaPair pair,
@@ -56,7 +56,7 @@ public class SyntaxAnalyser {
     // { MemberDeclaration }
     // end
     private ProgramTree parseClass() {
-        var currentNode = new ProgramTree(null, SyntaxComponent.CLASS_DECLARATION);
+        var currentNode = new ProgramTree(SyntaxComponent.CLASS_DECLARATION);
         TokenLexemaPair pair = lexer.nextPair();
 
         checkToken(currentNode, pair, Token.TK_CLASS);
@@ -69,7 +69,7 @@ public class SyntaxAnalyser {
         if (currentToken != Token.TK_EXTENDS && currentToken != Token.TK_IS)
             throw new SyntaxError(pair.getLexema());
 
-        currentNode.addChild(new ProgramTree(pair, null));
+        currentNode.addChild(new ProgramTree(pair));
 
         if (currentToken == Token.TK_EXTENDS) {
             pair = lexer.nextPair();
@@ -89,7 +89,7 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseMembers() {
-        var currentNode = new ProgramTree(null, SyntaxComponent.MEMBER_DECLARATIONS);
+        var currentNode = new ProgramTree(SyntaxComponent.MEMBER_DECLARATIONS);
         TokenLexemaPair pair = lexer.currentPair();
 
         while (pair.getToken() != Token.TK_END) {
@@ -101,7 +101,7 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseMember() {
-        var currentNode = new ProgramTree(null, SyntaxComponent.MEMBER_DECLARATION);
+        var currentNode = new ProgramTree(SyntaxComponent.MEMBER_DECLARATION);
         TokenLexemaPair pair = lexer.currentPair();
 
         if (pair.getToken() == Token.TK_VAR) {
@@ -117,7 +117,7 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseVariableDeclaration() {
-        var currentNode = new ProgramTree(null, SyntaxComponent.VARIABLE_DECLARATION);
+        var currentNode = new ProgramTree(SyntaxComponent.VARIABLE_DECLARATION);
         TokenLexemaPair pair = null;
 
         Token [] tokens = {Token.TK_VAR, Token.TK_IDENTIFIER, Token.TK_COLON};
@@ -136,11 +136,11 @@ public class SyntaxAnalyser {
                 pair.getToken() != Token.TK_ARRAY)
             throw new SyntaxError(pair.getLexema());
 
-        return new ProgramTree(pair, null);
+        return new ProgramTree(pair);
     }
 
     private ProgramTree parseMethodDeclaration() {
-        var currentNode = new ProgramTree(null, SyntaxComponent.METHOD_DECALRATION);
+        var currentNode = new ProgramTree(SyntaxComponent.METHOD_DECALRATION);
         TokenLexemaPair pair = null;
 
         Token [] tokens = {Token.TK_METHOD, Token.TK_IDENTIFIER, Token.TK_OPEN_PAREN};
@@ -172,7 +172,7 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseParameters() {
-        var currentNode = new ProgramTree(null, SyntaxComponent.PARAMETERS);
+        var currentNode = new ProgramTree(SyntaxComponent.PARAMETERS);
         TokenLexemaPair pair = lexer.currentPair();
 
         while (pair.getToken() != Token.TK_CLOSE_PAREN) {
@@ -181,7 +181,7 @@ public class SyntaxAnalyser {
             pair = lexer.currentPair();
 
             if (pair.getToken() == Token.TK_COMMA) {
-                currentNode.addChild(new ProgramTree(pair, null));
+                currentNode.addChild(new ProgramTree(pair));
                 pair = lexer.nextPair();
             }
         }
@@ -190,7 +190,7 @@ public class SyntaxAnalyser {
     }
 
     public ProgramTree parseParameter() {
-        var currentNode = new ProgramTree(null, SyntaxComponent.VARIABLE_DECLARATION);
+        var currentNode = new ProgramTree(SyntaxComponent.VARIABLE_DECLARATION);
         TokenLexemaPair pair = null;
 
         Token [] tokens = {Token.TK_IDENTIFIER, Token.TK_COLON};
@@ -206,7 +206,7 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseConstructorDeclaration() {
-        var currentNode = new ProgramTree(null, SyntaxComponent.CONSTRUCTOR_DECLARATION);
+        var currentNode = new ProgramTree(SyntaxComponent.CONSTRUCTOR_DECLARATION);
         return null;
     }
 

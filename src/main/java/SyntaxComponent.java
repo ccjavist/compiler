@@ -1,4 +1,4 @@
-public enum SyntaxComponent {
+public enum SyntaxComponent implements NodeValue {
     PROGRAM,
     CLASS_DECLARATION,
     MEMBER_DECLARATIONS,
