@@ -1,8 +1,19 @@
 public class Try {
 
     public static void main(String[] args) {
+        String filePath = "SimpleInput.txt";
+        testLexer(filePath);
+        testSyntaxAnalyser(filePath);
+    }
 
-        Lexer lexer = new Lexer("Input.txt");
+    public static void testSyntaxAnalyser(String filePath) {
+        var lexer = new Lexer(filePath);
+        var syntaxAnalyser = new SyntaxAnalyser(lexer);
+        System.out.println(syntaxAnalyser.makeTree());
+    }
+
+    public static void testLexer(String filePath) {
+        Lexer lexer = new Lexer(filePath);
 
         System.out.println("Lexical Analysis");
         System.out.println("-----------------");

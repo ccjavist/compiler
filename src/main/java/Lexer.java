@@ -105,4 +105,24 @@ public class Lexer {
     public boolean isExausthed() {
         return exausthed;
     }
+
+    public TokenLexemaPair nextPair() throws LexerError {
+        if (!isExausthed()) {
+            var result = new TokenLexemaPair(currentToken(), currentLexema());
+            moveAhead();
+            return result;
+        } else if (!errorMessage.equals(""))
+            throw new LexerError(errorMessage);
+        else
+            return null;
+    }
+
+    public TokenLexemaPair currentPair() throws LexerError {
+        if (!isExausthed()) {
+            return new TokenLexemaPair(currentToken(), currentLexema());
+        } else if (!errorMessage.equals(""))
+            throw new LexerError(errorMessage);
+        else
+            return null;
+    }
 }

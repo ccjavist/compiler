@@ -5,7 +5,9 @@ public enum Token {
     TK_CLASS ("class"),
     TK_EXTENDS ("extends"),
 	TK_INTEGER ("Integer"),
+    TK_REAL ("Real"),
 	TK_ARRAY ("Array"),
+    TK_MOD ("mod"),
     TK_IS ("is"),
     TK_END ("end"),
     TK_VAR ("var"),
@@ -19,10 +21,10 @@ public enum Token {
     TK_RETURN ("return"),
 
     // Identifiers and literals
+    TK_BOOLEAN_LITERAL ("true|false"),
     TK_IDENTIFIER ("[a-zA-Z_][a-zA-Z0-9_]*"),
     TK_INTEGER_LITERAL ("\\d+"),
     TK_REAL_LITERAL ("\\d+\\.\\d+"),
-    TK_BOOLEAN_LITERAL ("true|false"),
 
     // Punctuation
 	TK_OPEN_BRACKET ("\\["),
