@@ -1,4 +1,4 @@
-class LCDAlgorithm is
+class Something [Integer] is
     var a: Integer
     var b: Integer
 
@@ -7,12 +7,12 @@ class LCDAlgorithm is
         x := a
         var y: Integer
         y := b
-        while y + 0 loop
+        while y.Unequal(0) loop
             var r: Integer
-            r := x mod y
+            r := x.Mod(y)
             x := y
             y := r
         end
-        return (a*b) / x
+        return a.Mult(b).Div(x)
     end
 end

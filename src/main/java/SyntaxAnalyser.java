@@ -1,5 +1,3 @@
-import java.util.List;
-
 public class SyntaxAnalyser {
     private final ProgramTree tree;
     private final Lexer lexer;
@@ -40,9 +38,8 @@ public class SyntaxAnalyser {
         TokenLexemaPair pair = lexer.nextPair();
 
         checkToken(currentNode, pair, Token.TK_CLASS);
-        pair = lexer.nextPair();
+        currentNode.addChild(parseClassName());
 
-        checkToken(currentNode, pair, Token.TK_IDENTIFIER);
         pair = lexer.nextPair();
         Token currentToken = pair.getToken();
 
@@ -52,11 +49,9 @@ public class SyntaxAnalyser {
         currentNode.addChild(new ProgramTree(pair));
 
         if (currentToken == Token.TK_EXTENDS) {
-            pair = lexer.nextPair();
+            currentNode.addChild(parseClassName());
 
-            checkToken(currentNode, pair, Token.TK_IDENTIFIER);
             pair = lexer.nextPair();
-
             checkToken(currentNode, pair, Token.TK_IS);
         }
 
@@ -64,6 +59,30 @@ public class SyntaxAnalyser {
         pair = lexer.nextPair();
 
         checkToken(currentNode, pair, Token.TK_END);
+
+        return currentNode;
+    }
+
+    private ProgramTree parseClassName() {
+        var currentNode = new ProgramTree(SyntaxComponent.CLASS_NAME);
+        TokenLexemaPair pair = lexer.nextPair();
+
+        if (pair.getToken() == Token.TK_INTEGER ||
+                pair.getToken() == Token.TK_REAL ||
+                pair.getToken() == Token.TK_ARRAY) {
+            checkToken(currentNode, pair, pair.getToken());
+        } else
+            checkToken(currentNode, pair, Token.TK_IDENTIFIER);
+
+        pair = lexer.currentPair();
+        if (pair.getToken() == Token.TK_OPEN_BRACKET) {
+            pair = lexer.nextPair();
+            currentNode.addChild(new ProgramTree(pair));
+            currentNode.addChild(parseClassName());
+
+            pair = lexer.nextPair();
+            checkToken(currentNode, pair, Token.TK_CLOSE_BRACKET);
+        }
 
         return currentNode;
     }
@@ -103,7 +122,7 @@ public class SyntaxAnalyser {
         Token[] tokens = {Token.TK_VAR, Token.TK_IDENTIFIER, Token.TK_COLON};
         checkToken(currentNode, pair, tokens);
 
-        currentNode.addChild(parseType());
+        currentNode.addChild(parseExpression());
 
         return currentNode;
     }
@@ -136,7 +155,7 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseMethodDeclaration() {
-        var currentNode = new ProgramTree(SyntaxComponent.METHOD_DECALRATION);
+        var currentNode = new ProgramTree(SyntaxComponent.METHOD_DECLARATION);
         TokenLexemaPair pair = null;
 
         checkToken(currentNode, pair, new Token[]
@@ -154,7 +173,7 @@ public class SyntaxAnalyser {
         if (lexer.currentPair().getToken() == Token.TK_COLON) {
             pair = lexer.nextPair();
             checkToken(currentNode, pair, Token.TK_COLON);
-            currentNode.addChild(parseType());
+            currentNode.addChild(parseIdentifier());
         }
 
         pair = lexer.nextPair();
@@ -166,6 +185,18 @@ public class SyntaxAnalyser {
         checkToken(currentNode, pair, Token.TK_END);
 
         return currentNode;
+    }
+
+    private ProgramTree parseIdentifier() {
+        TokenLexemaPair pair = lexer.nextPair();
+
+        if (pair.getToken() == Token.TK_INTEGER ||
+                pair.getToken() == Token.TK_REAL ||
+                pair.getToken() == Token.TK_ARRAY ||
+                pair.getToken() == Token.TK_IDENTIFIER)
+            return new ProgramTree(pair);
+
+        throw new SyntaxError(pair.getLexema());
     }
 
     private ProgramTree parseType() {
@@ -216,7 +247,7 @@ public class SyntaxAnalyser {
         Token[] tokens = {Token.TK_IDENTIFIER, Token.TK_COLON};
         checkToken(currentNode, pair, tokens);
 
-        currentNode.addChild(parseType());
+        currentNode.addChild(parseClassName());
 
         return currentNode;
     }
@@ -241,16 +272,16 @@ public class SyntaxAnalyser {
         if (pair.getToken() == Token.TK_VAR) {
             ProgramTree varDecl = parseVariableDeclaration();
 
-            if (varDecl.getChild(3).getValue() instanceof SyntaxComponent) {
-                ProgramTree arrayType = varDecl.getChild(3);
-                pair = lexer.nextPair();
-                checkToken(arrayType, pair, Token.TK_OPEN_PAREN);
-
-                arrayType.addChild(parseExpression());
-
-                pair = lexer.nextPair();
-                checkToken(arrayType, pair, Token.TK_CLOSE_PAREN);
-            }
+//            if (varDecl.getChild(3).getValue() instanceof SyntaxComponent) {
+//                ProgramTree arrayType = varDecl.getChild(3);
+//                pair = lexer.nextPair();
+//                checkToken(arrayType, pair, Token.TK_OPEN_PAREN);
+//
+//                arrayType.addChild(parseExpression());
+//
+//                pair = lexer.nextPair();
+//                checkToken(arrayType, pair, Token.TK_CLOSE_PAREN);
+//            }
 
             currentNode.addChild(varDecl);
         } else if (pair.getToken() == Token.TK_WHILE) {
@@ -336,6 +367,56 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseExpression() {
+        var currentNode = new ProgramTree(SyntaxComponent.EXPRESSION);
+        currentNode.addChild(parsePrimary());
+
+        TokenLexemaPair pair = lexer.currentPair();
+
+        while (pair.getToken() == Token.TK_DOT) {
+            pair = lexer.nextPair();
+            checkToken(currentNode, pair, Token.TK_DOT);
+
+            currentNode.addChild(parseIdentifier());
+            currentNode.addChild(parseArguments());
+            pair = lexer.currentPair();
+        }
+
+        return currentNode;
+    }
+
+    private ProgramTree parsePrimary() {
+        TokenLexemaPair pair = lexer.currentPair();
+
+        if (pair.getToken() == Token.TK_INTEGER_LITERAL ||
+                pair.getToken() == Token.TK_REAL_LITERAL ||
+                pair.getToken() == Token.TK_BOOLEAN_LITERAL ||
+                pair.getToken() == Token.TK_THIS) {
+            pair = lexer.nextPair();
+            return new ProgramTree(pair);
+        }
+
+        return parseClassName();
+    }
+
+    private ProgramTree parseArguments() {
+        var currentNode = new ProgramTree(SyntaxComponent.ARGUMENTS);
+        TokenLexemaPair pair = lexer.nextPair();
+        checkToken(currentNode, pair, Token.TK_OPEN_PAREN);
+        currentNode.addChild(parseExpression());
+
+        pair = lexer.nextPair();
+        while (pair.getToken() == Token.TK_COMMA) {
+            currentNode.addChild(parseExpression());
+            lexer.nextPair();
+        }
+
+        checkToken(currentNode, pair, Token.TK_CLOSE_PAREN);
+
+        return currentNode;
+    }
+
+    @Deprecated
+    private ProgramTree parseExpression1() {
         var currentNode = new ProgramTree(SyntaxComponent.EXPRESSION);
         ProgramTree left = parseTerm();
 

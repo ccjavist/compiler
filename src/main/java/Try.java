@@ -1,7 +1,7 @@
 public class Try {
 
     public static void main(String[] args) {
-        String filePath = "D:\\IntellijIdeaProjects\\compiler1\\src\\main\\java\\SimpleInput.txt";
+        String filePath = "SimpleInput.txt";
         testLexer(filePath);
         testSyntaxAnalyser(filePath);
     }
