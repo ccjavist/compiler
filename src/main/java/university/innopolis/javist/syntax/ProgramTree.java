@@ -1,3 +1,5 @@
+package university.innopolis.javist.syntax;
+
 import java.util.ArrayList;
 
 public class ProgramTree {

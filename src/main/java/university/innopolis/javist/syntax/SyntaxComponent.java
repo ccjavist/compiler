@@ -1,3 +1,5 @@
+package university.innopolis.javist.syntax;
+
 public enum SyntaxComponent implements NodeValue {
     PROGRAM,
     CLASS_DECLARATION,

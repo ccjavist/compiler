@@ -1,7 +1,12 @@
+package university.innopolis.javist;
+
+import university.innopolis.javist.lexer.Lexer;
+import university.innopolis.javist.syntax.SyntaxAnalyser;
+
 public class Try {
 
     public static void main(String[] args) {
-        String filePath = "SimpleInput.txt";
+        String filePath = "src/main/resources/sources/SimpleInput.txt";
         testLexer(filePath);
         testSyntaxAnalyser(filePath);
     }

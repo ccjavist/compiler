@@ -1,3 +1,10 @@
+package university.innopolis.javist.syntax;
+
+import university.innopolis.javist.errors.LexerError;
+import university.innopolis.javist.errors.SyntaxError;
+import university.innopolis.javist.lexer.Lexer;
+import university.innopolis.javist.lexer.Token;
+
 public class SyntaxAnalyser {
     private final ProgramTree tree;
     private final Lexer lexer;
@@ -272,15 +279,15 @@ public class SyntaxAnalyser {
         if (pair.getToken() == Token.TK_VAR) {
             ProgramTree varDecl = parseVariableDeclaration();
 
-//            if (varDecl.getChild(3).getValue() instanceof SyntaxComponent) {
-//                ProgramTree arrayType = varDecl.getChild(3);
+//            if (varDecl.getChild(3).getValue() instanceof syntax.SyntaxComponent) {
+//                syntax.ProgramTree arrayType = varDecl.getChild(3);
 //                pair = lexer.nextPair();
-//                checkToken(arrayType, pair, Token.TK_OPEN_PAREN);
+//                checkToken(arrayType, pair, lexer.Token.TK_OPEN_PAREN);
 //
 //                arrayType.addChild(parseExpression());
 //
 //                pair = lexer.nextPair();
-//                checkToken(arrayType, pair, Token.TK_CLOSE_PAREN);
+//                checkToken(arrayType, pair, lexer.Token.TK_CLOSE_PAREN);
 //            }
 
             currentNode.addChild(varDecl);

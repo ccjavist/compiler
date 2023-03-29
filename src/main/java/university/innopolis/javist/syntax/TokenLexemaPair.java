@@ -1,3 +1,7 @@
+package university.innopolis.javist.syntax;
+
+import university.innopolis.javist.lexer.Token;
+
 public class TokenLexemaPair implements NodeValue {
     private Token token;
     private String lexema;

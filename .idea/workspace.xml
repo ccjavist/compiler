@@ -4,11 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5c7f7103-e8e5-449f-b206-0cf67cb2262c" name="Changes" comment="Initialize project" />
+    <list default="true" id="5c7f7103-e8e5-449f-b206-0cf67cb2262c" name="Changes" comment="Initialize project">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/BubbleSort.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/BubbleSort.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/Input.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/LCDA.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/LCDA.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/lexer/Lexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/LexerError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/errors/LexerError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/NodeValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/NodeValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ProgramTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/ProgramTree.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SimpleInput.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/SimpleInput.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SyntaxAnalyser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/SyntaxAnalyser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SyntaxComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/SyntaxComponent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/SyntaxError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/errors/SyntaxError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/lexer/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/TokenLexemaPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/TokenLexemaPair.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Try.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/Try.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -23,6 +46,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
   <component name="ProjectId" id="2LSKPTn94qujPHwqF7obdy6tEEj" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -36,9 +62,41 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RunManager" selected="Application.university.innopolis.javist.Try">
+    <configuration name="Try" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Try" />
+      <module name="compiler" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="university.innopolis.javist.Try" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="university.innopolis.javist.Try" />
+      <module name="compiler" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="university.innopolis.javist.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.university.innopolis.javist.Try" />
+        <item itemvalue="Application.Try" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -48,6 +106,7 @@
       <option name="presentableId" value="Default" />
       <updated>1675859021913</updated>
       <workItem from="1675859023470" duration="332000" />
+      <workItem from="1680044401774" duration="2257000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize project">
       <created>1675859096991</created>

@@ -1,3 +1,8 @@
+package university.innopolis.javist.lexer;
+
+import university.innopolis.javist.errors.LexerError;
+import university.innopolis.javist.syntax.TokenLexemaPair;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;

@@ -1,3 +1,5 @@
+package university.innopolis.javist.lexer;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

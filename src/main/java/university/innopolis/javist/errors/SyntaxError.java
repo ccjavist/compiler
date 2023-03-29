@@ -1,3 +1,5 @@
+package university.innopolis.javist.errors;
+
 public class SyntaxError extends Error {
     public SyntaxError() {
         super();
