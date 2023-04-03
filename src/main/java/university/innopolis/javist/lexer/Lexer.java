@@ -12,24 +12,43 @@ import java.util.stream.Stream;
 
 public class Lexer {
     private StringBuilder input = new StringBuilder();
+
     private Token token;
+
     private String lexema;
+
     private boolean exausthed = false;
+
     private String errorMessage = "";
+
     private Set<Character> blankChars = new HashSet<Character>();
 
-    public Lexer(String filePath) {
+    private int line;
 
-		
+    private int column;
+
+    private int position;
+
+
+    public Lexer(String filePath) {
+        line = 1;
+        column = 0;
+        position = 0;
+
         try (Stream<String> st = Files.lines(Paths.get(filePath))) {
-            st.forEach(input::append);
+            st.forEach(line -> {
+                        input.append(line);
+                        input.append('\n');
+                    }
+            );
+            input.deleteCharAt(input.length()-1);
         } catch (IOException ex) {
             exausthed = true;
             errorMessage = "Could not read file: " + filePath;
             return;
         }
 
-		// then we add all the characters that we consider blank
+        // then we add all the characters that we consider blank
         blankChars.add('\r');
         blankChars.add('\n');
         blankChars.add((char) 8);
@@ -68,6 +87,12 @@ public class Lexer {
         int charsToDelete = 0;
 
         while (blankChars.contains(input.charAt(charsToDelete))) {
+            position++;
+            if (input.charAt(charsToDelete) == '\n') {
+                column = 0;
+                line++;
+            }
+            column++;
             charsToDelete++;
         }
 
@@ -81,6 +106,8 @@ public class Lexer {
             int end = t.endOfMatch(input.toString());
 
             if (end != -1) {
+                position += end;
+                column += end;
                 token = t;
                 lexema = input.substring(0, end);
                 input.delete(0, end);
@@ -113,7 +140,7 @@ public class Lexer {
 
     public TokenLexemaPair nextPair() throws LexerError {
         if (!isExausthed()) {
-            var result = new TokenLexemaPair(currentToken(), currentLexema());
+            var result = new TokenLexemaPair(currentToken(), currentLexema(), line, column);
             moveAhead();
             return result;
         } else if (!errorMessage.equals(""))
@@ -124,7 +151,7 @@ public class Lexer {
 
     public TokenLexemaPair currentPair() throws LexerError {
         if (!isExausthed()) {
-            return new TokenLexemaPair(currentToken(), currentLexema());
+            return new TokenLexemaPair(currentToken(), currentLexema(), line, column);
         } else if (!errorMessage.equals(""))
             throw new LexerError(errorMessage);
         else
