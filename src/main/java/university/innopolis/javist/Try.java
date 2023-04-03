@@ -1,6 +1,7 @@
 package university.innopolis.javist;
 
 import university.innopolis.javist.lexer.Lexer;
+import university.innopolis.javist.syntax.ProgramTree;
 import university.innopolis.javist.syntax.SyntaxAnalyser;
 
 public class Try {
@@ -14,7 +15,16 @@ public class Try {
     public static void testSyntaxAnalyser(String filePath) {
         var lexer = new Lexer(filePath);
         var syntaxAnalyser = new SyntaxAnalyser(lexer);
-        System.out.println(syntaxAnalyser.makeTree());
+        printAST(syntaxAnalyser.makeTree(), 0);
+    }
+
+    public static void printAST(ProgramTree node, int depth) {
+        String indent = "  ".repeat(depth);
+
+        System.out.println(indent + node.toString());
+        for (int i = 0; i < node.getChildrenCount(); i++) {
+            printAST(node.getChild(i), depth + 1);
+        }
     }
 
     public static void testLexer(String filePath) {
@@ -23,7 +33,7 @@ public class Try {
         System.out.println("Lexical Analysis");
         System.out.println("-----------------");
         while (!lexer.isExausthed()) {
-            System.out.printf("%-18s :  %s \n",lexer.currentLexema() , lexer.currentToken());
+            System.out.printf("%-18s :  %s \n", lexer.currentLexema(), lexer.currentToken());
             lexer.moveAhead();
         }
 

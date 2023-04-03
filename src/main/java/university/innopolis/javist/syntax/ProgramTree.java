@@ -1,6 +1,9 @@
 package university.innopolis.javist.syntax;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 
 public class ProgramTree {
     private final NodeValue value;
@@ -48,16 +51,6 @@ public class ProgramTree {
             result.append(component).append(" ");
         } else
             result.append("INVALID_NODE ");
-
-        if (!children.isEmpty()) {
-            result.append(":: Children:\n[");
-
-            for (ProgramTree child: children)
-                result.append(child.toString());
-
-            result.append("]");
-        }
-
         return result.toString();
     }
 }
