@@ -1,15 +1,16 @@
 package university.innopolis.javist.syntax;
 
-import java.util.ArrayDeque;
+import lombok.Getter;
+
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
 
 public class ProgramTree {
     private final NodeValue value;
+
+    @Getter
     private final ArrayList<ProgramTree> children;
 
-    public ProgramTree (NodeValue value) {
+    public ProgramTree(NodeValue value) {
         this.children = new ArrayList<>();
         this.value = value;
     }

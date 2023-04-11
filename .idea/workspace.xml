@@ -4,26 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5c7f7103-e8e5-449f-b206-0cf67cb2262c" name="Changes" comment="Initialize project">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="5c7f7103-e8e5-449f-b206-0cf67cb2262c" name="Changes" comment="Create ConditionalSymbolTable">
+      <change afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/errors/Constants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/errors/SemanticError.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/Scope.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/symbol/ClassSymbol.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/symbol/ConstructorSymbol.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/symbol/Symbol.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/symbol/SymbolTable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/symbol/VariableSymbol.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/sources/2.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/sources/3.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/sources/4.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/sources/5.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/sources/6.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/sources/7.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/BubbleSort.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/BubbleSort.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/Input.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/LCDA.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/LCDA.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/lexer/Lexer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/LexerError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/errors/LexerError.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/NodeValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/NodeValue.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ProgramTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/ProgramTree.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SimpleInput.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/SimpleInput.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SyntaxAnalyser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/SyntaxAnalyser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SyntaxComponent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/SyntaxComponent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/SyntaxError.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/errors/SyntaxError.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/lexer/Token.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/TokenLexemaPair.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/TokenLexemaPair.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Try.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/Try.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/Try.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/Try.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/lexer/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/lexer/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/ClassSymbolTable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/ConditionalSymbolTable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/LoopSymbolTable.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/MethodSymbolTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/symbol/MethodSymbol.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/ProgramTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/syntax/ProgramTree.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,20 +60,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\mmatantsev\IdeaProjects\comiler\src\main\resources\sources" />
+      <recent name="C:\Users\mmatantsev\IdeaProjects\comiler\src\main\java\university\innopolis\javist" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="university.innopolis.javist.errors" />
+    </key>
+  </component>
   <component name="RunManager" selected="Application.university.innopolis.javist.Try">
     <configuration name="Try" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Try" />
@@ -106,7 +120,11 @@
       <option name="presentableId" value="Default" />
       <updated>1675859021913</updated>
       <workItem from="1675859023470" duration="332000" />
-      <workItem from="1680044401774" duration="2257000" />
+      <workItem from="1680044401774" duration="8002000" />
+      <workItem from="1680474749678" duration="15874000" />
+      <workItem from="1680529016387" duration="599000" />
+      <workItem from="1680591705608" duration="2235000" />
+      <workItem from="1680867952054" duration="38944000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize project">
       <created>1675859096991</created>
@@ -115,7 +133,63 @@
       <option name="project" value="LOCAL" />
       <updated>1675859096991</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Refact project structure">
+      <created>1680048865999</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1680048865999</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Add position for each token">
+      <created>1680491711417</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1680491711417</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Print beauty AST">
+      <created>1680494062422</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1680494062422</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Create ClassSymbolNotFound exception">
+      <created>1680513573549</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1680513573549</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Create ClassSymbolTable">
+      <created>1680513594441</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1680513594441</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Create MethodSymbolTable">
+      <created>1680513608791</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1680513608791</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Create LoopSymbolTable">
+      <created>1680513631585</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1680513631585</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Create ConditionalSymbolTable">
+      <created>1680513646709</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1680513646709</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -146,6 +220,45 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initialize project" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initialize project" />
+    <MESSAGE value="Refact project structure" />
+    <MESSAGE value="Add position for each token" />
+    <MESSAGE value="Print beauty AST" />
+    <MESSAGE value="Create ClassSymbolNotFound exception" />
+    <MESSAGE value="Create ClassSymbolTable" />
+    <MESSAGE value="Create MethodSymbolTable" />
+    <MESSAGE value="Create LoopSymbolTable" />
+    <MESSAGE value="Create ConditionalSymbolTable" />
+    <option name="LAST_COMMIT_MESSAGE" value="Create ConditionalSymbolTable" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java</url>
+          <line>25</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java</url>
+          <line>89</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java</url>
+          <line>63</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java</url>
+          <line>70</line>
+          <option name="timeStamp" value="24" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java</url>
+          <line>85</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

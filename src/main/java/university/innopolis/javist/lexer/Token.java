@@ -1,5 +1,7 @@
 package university.innopolis.javist.lexer;
 
+import lombok.Getter;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,7 +58,8 @@ public enum Token {
     // Keywords
     TK_TRUE ("true"),
     TK_FALSE ("false");
-	
+
+    @Getter
     private final Pattern pattern;
 
     Token(String regex) {
