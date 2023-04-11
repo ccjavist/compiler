@@ -45,4 +45,8 @@ public class Scope {
         }
         return parentScope.lookup(name);
     }
+
+    public void put(String name, Symbol symbol){
+        this.symbolTable.put(name, symbol);
+    }
 }
