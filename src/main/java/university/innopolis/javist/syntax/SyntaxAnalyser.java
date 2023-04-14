@@ -23,7 +23,7 @@ public class SyntaxAnalyser {
 
     private void checkToken(ProgramTree currentNode, TokenLexemaPair pair, Token token) {
         if (pair.getToken() != token)
-            throw new SyntaxError(pair.getLexema());
+            throw new SyntaxError(pair.getLexema(), pair.getLine(), pair.getPosition());
 
         currentNode.addChild(new ProgramTree(pair, pair.getLine(), pair.getPosition()));
     }
@@ -51,7 +51,7 @@ public class SyntaxAnalyser {
         Token currentToken = pair.getToken();
 
         if (currentToken != Token.TK_EXTENDS && currentToken != Token.TK_IS)
-            throw new SyntaxError(pair.getLexema());
+            throw new SyntaxError(pair.getLexema(), pair.getLine(), pair.getPosition());
 
         currentNode.addChild(new ProgramTree(pair, pair.getLine(), pair.getPosition()));
 
@@ -117,7 +117,7 @@ public class SyntaxAnalyser {
         } else if (pair.getToken() == Token.TK_THIS) {
             currentNode.addChild(parseConstructorDeclaration());
         } else
-            throw new SyntaxError(pair.getLexema());
+            throw new SyntaxError(pair.getLexema(), pair.getLine(), pair.getPosition());
 
         return currentNode;
     }
@@ -205,7 +205,7 @@ public class SyntaxAnalyser {
                 pair.getToken() == Token.TK_IDENTIFIER)
             return new ProgramTree(pair, pair.getLine(), pair.getPosition());
 
-        throw new SyntaxError(pair.getLexema());
+        throw new SyntaxError(pair.getLexema(), pair.getLine(), pair.getPosition());
     }
 
     private ProgramTree parseType() {
@@ -216,7 +216,7 @@ public class SyntaxAnalyser {
             return new ProgramTree(pair, pair.getLine(), pair.getPosition());
 
         if (pair.getToken() != Token.TK_ARRAY)
-            throw new SyntaxError(pair.getLexema());
+            throw new SyntaxError(pair.getLexema(), pair.getLine(), pair.getPosition());
 
         var result = new ProgramTree(SyntaxComponent.ARRAY_TYPE, pair.getLine(), pair.getPosition());
         result.addChild(new ProgramTree(pair, pair.getLine(), pair.getPosition()));
@@ -480,7 +480,7 @@ public class SyntaxAnalyser {
 
             pair = lexer.nextPair();
             if (pair.getToken() != Token.TK_CLOSE_PAREN)
-                throw new SyntaxError(pair.getLexema());
+                throw new SyntaxError(pair.getLexema(), pair.getLine(), pair.getPosition());
         } else
             checkToken(currentNode, pair, Token.TK_IDENTIFIER);
 

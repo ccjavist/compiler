@@ -1,0 +1,18 @@
+class Something [Integer] is
+    var a: Integer
+    var b: Integer
+
+    method calculate(a: Integer, b: Integer) : Integer is
+        var x: Integer
+        x := a
+        var y: Integer
+        y := b.NotDeclaredMethod(x)
+        while y.Unequal(0) loop
+            var r: Integer
+            r := x.Mod(y)
+            x := y
+            y := r
+        end
+        return a.Mult(b).Div(x)
+    end
+end

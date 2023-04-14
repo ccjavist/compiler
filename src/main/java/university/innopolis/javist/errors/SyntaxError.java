@@ -5,11 +5,11 @@ public class SyntaxError extends Error {
         super();
     }
 
-    public SyntaxError(String unexpected) {
-        super("Unexpected \"" + unexpected + "\"");
+    public SyntaxError(String unexpected, int line, int column) {
+        super(String.format("Unexpected \"%s\". Line: %d, Column: %d", unexpected, line, column));
     }
 
-    public SyntaxError(String expected, String got) {
-        super("Expected " + expected + " but got " + got + ".");
+    public SyntaxError(String expected, String got, int line, int column) {
+        super(String.format("Expected %s but got %s. Line: %d, Column: %d", expected, got, line, column));
     }
 }

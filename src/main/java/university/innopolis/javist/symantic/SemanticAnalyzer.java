@@ -28,7 +28,7 @@ public class SemanticAnalyzer {
                 throw new SemanticError("Root of program tree is invalid", root.getLine(), root.getColumn());
             }
         } catch (SemanticError e){
-            System.out.println(e.getMessage());
+            System.out.println("Semantic Error: "+ e.getMessage());
         }
     }
 
