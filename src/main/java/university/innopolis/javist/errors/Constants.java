@@ -18,4 +18,5 @@ public class Constants {
     public static final String INVALID_EXPRESSION = "Invalid expression";
     public static final String CANNOT_RESOLVE_METHOD = "Cannot resolve method %s";
     public static final String UNEXPECTED_VARIABLE_TYPE = "Unexpected type %s for variable %s, expected: %s";
+    public static final String INVALID_RETURN_STATEMENT = "Unexpected return statement of type %s, expected: %s";
 }

@@ -9,8 +9,8 @@ import university.innopolis.javist.syntax.SyntaxAnalyser;
 public class Try {
 
     public static void main(String[] args) {
-//         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test1.txt");
-         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test2.txt");
+         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test1.txt");
+//         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test2.txt");
 //         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test3.txt");
 //         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test4.txt");
     }

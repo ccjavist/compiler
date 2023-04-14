@@ -21,14 +21,14 @@ public class SemanticAnalyzer {
     }
 
     public void analyze() throws SemanticError {
-        try{
+        try {
             if (root.getValue() == SyntaxComponent.PROGRAM) {
                 analyzeProgram(root);
             } else {
                 throw new SemanticError("Root of program tree is invalid", root.getLine(), root.getColumn());
             }
-        } catch (SemanticError e){
-            System.out.println("Semantic Error: "+ e.getMessage());
+        } catch (SemanticError e) {
+            System.out.println("Semantic Error: " + e.getMessage());
         }
     }
 
@@ -162,7 +162,7 @@ public class SemanticAnalyzer {
         // analyze statements
         Integer statementsPosition = findFirstInChildren(node, SyntaxComponent.STATEMENTS);
         if (statementsPosition != null) {
-            analyzeStatements(node.getChild(statementsPosition), className, methodSymbol.getScope());
+            analyzeStatements(node.getChild(statementsPosition), className, methodSymbol.getScope(), methodSymbol);
         }
     }
 
@@ -173,7 +173,7 @@ public class SemanticAnalyzer {
         // TODO: args reload
     }
 
-    private void analyzeStatements(ProgramTree node, String className, Scope scope) {
+    private void analyzeStatements(ProgramTree node, String className, Scope scope, MethodSymbol methodSymbol) {
         ClassSymbol classSymbol = (ClassSymbol) symbolTable.get(className);
         for (ProgramTree statement : node.getChildren()) {
             if (statement.getChild(0).getValue() == SyntaxComponent.VARIABLE_DECLARATION) {
@@ -195,6 +195,16 @@ public class SemanticAnalyzer {
                             variableSymbol.getName(), originalVariable.getType()),
                             statement.getLine(), statement.getColumn());
                 }
+            }
+            if (statement.getChild(0).getValue() == SyntaxComponent.RETURN_STATEMENT) {
+                String type = parseExpression(statement.getChild(0).getChild(1).getChildren(), className, scope, null);
+                if ((methodSymbol.getReturnType() == null && type != null) ||
+                        !methodSymbol.getReturnType().equals(type)) {
+                    throw new SemanticError(String.format(Constants.INVALID_RETURN_STATEMENT, type,
+                            methodSymbol.getReturnType() == null ? "void" : methodSymbol.getReturnType()),
+                            statement.getChild(0).getLine(), statement.getChild(0).getColumn());
+                }
+
             }
         }
     }
