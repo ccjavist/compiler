@@ -1,15 +1,31 @@
 package university.innopolis.javist.symantic.symbol;
 
 
-public class ConstructorSymbol extends Symbol {
-    private String type;
+import lombok.Getter;
 
-    public ConstructorSymbol(String name, String type) {
-        super(name);
-        this.type = type;
+import java.util.List;
+import java.util.Objects;
+
+@Getter
+public class ConstructorSymbol extends Symbol {
+
+    private final List<ParameterSymbol> parameters;
+
+    public ConstructorSymbol(List<ParameterSymbol> parameters) {
+        super(null);
+        this.parameters = parameters;
     }
 
-    public String getType() {
-        return type;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ConstructorSymbol that = (ConstructorSymbol) o;
+        return parameters.equals(that.parameters);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(parameters);
     }
 }

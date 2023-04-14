@@ -1,20 +1,37 @@
 package university.innopolis.javist.symantic.symbol;
 
-import university.innopolis.javist.errors.SymbolNotFoundException;
-import university.innopolis.javist.symantic.symbol.Symbol;
+import lombok.Getter;
+import university.innopolis.javist.symantic.Scope;
 
-import java.util.*;
+import java.util.List;
 
 
 public class MethodSymbol extends Symbol {
-    private String type;
 
-    public MethodSymbol(String name, String type) {
+    @Getter
+    private final String returnType;
+
+    @Getter
+    private final List<ParameterSymbol> parameters;
+
+    @Getter
+    private final Scope scope = new Scope();
+
+
+    public MethodSymbol(String name, String returnType, List<ParameterSymbol> parameters) {
         super(name);
-        this.type = type;
+        this.returnType = returnType;
+        this.parameters = parameters;
     }
 
-    public String getType() {
-        return type;
+    public boolean equals(String name, List<ParameterSymbol> parameters) {
+        if (this.getName().equals(name) && this.parameters.size() == parameters.size()) {
+            for (int i = 0; i < this.parameters.size(); i++) {
+                if (!this.parameters.get(i).equals(parameters.get(i))) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
