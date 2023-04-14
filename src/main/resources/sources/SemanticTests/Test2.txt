@@ -1,0 +1,13 @@
+class Something [Integer] is
+    var a: Integer
+    var b: Integer
+
+    method test(): Something is end
+
+    method calculate(a: Something, b: Integer) : Integer is
+        var x: Something
+        x := a.test()
+        var b: Integer
+        return b
+    end
+end
