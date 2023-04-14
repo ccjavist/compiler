@@ -2,12 +2,11 @@ class Something [Integer] is
     var a: Integer
     var b: Integer
 
-    method test(): Something is end
+    method test(b: Integer): Something is end
 
     method calculate(a: Something, b: Integer) : Integer is
         var x: Something
-        x := a.test()
-        var b: Integer
+        x := a.test(b, 1)
         return b
     end
 end
