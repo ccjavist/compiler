@@ -1,4 +1,4 @@
-class Something [Integer] is
+class Something is
     var a: Integer
     var b: Integer
 
