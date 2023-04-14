@@ -51,7 +51,6 @@ public class SemanticAnalyzer {
                 throw new SemanticError(Constants.CLASS_DECLARATION_NOT_FOUND, child.getLine(), child.getColumn());
             }
         }
-        System.out.println("ok");
     }
 
     private void fetchTypes(ProgramTree node) {
