@@ -1,18 +1,29 @@
 package university.innopolis.javist.syntax;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 
 public class ProgramTree {
     private final NodeValue value;
 
+    @Setter
+    @Getter
+    private int line;
+
+    @Getter
+    @Setter
+    private int column;
+
     @Getter
     private final ArrayList<ProgramTree> children;
 
-    public ProgramTree(NodeValue value) {
+    public ProgramTree(NodeValue value, int line, int column) {
         this.children = new ArrayList<>();
         this.value = value;
+        this.line = line;
+        this.column = column;
     }
 
     public ProgramTree getChild(int n) {

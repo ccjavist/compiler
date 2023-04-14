@@ -11,7 +11,7 @@ public class SyntaxAnalyser {
 
     public SyntaxAnalyser(Lexer lexer) {
         this.lexer = lexer;
-        tree = new ProgramTree(SyntaxComponent.PROGRAM);
+        tree = new ProgramTree(SyntaxComponent.PROGRAM, 0, 0);
     }
 
     public ProgramTree makeTree() throws SyntaxError, LexerError {
@@ -25,7 +25,7 @@ public class SyntaxAnalyser {
         if (pair.getToken() != token)
             throw new SyntaxError(pair.getLexema());
 
-        currentNode.addChild(new ProgramTree(pair));
+        currentNode.addChild(new ProgramTree(pair, pair.getLine(), pair.getPosition()));
     }
 
     private void checkToken(ProgramTree currentNode, TokenLexemaPair pair,
@@ -41,8 +41,8 @@ public class SyntaxAnalyser {
     // { MemberDeclaration }
     // end
     private ProgramTree parseClass() {
-        var currentNode = new ProgramTree(SyntaxComponent.CLASS_DECLARATION);
         TokenLexemaPair pair = lexer.nextPair();
+        var currentNode = new ProgramTree(SyntaxComponent.CLASS_DECLARATION, pair.getLine(), pair.getPosition());
 
         checkToken(currentNode, pair, Token.TK_CLASS);
         currentNode.addChild(parseClassName());
@@ -53,7 +53,7 @@ public class SyntaxAnalyser {
         if (currentToken != Token.TK_EXTENDS && currentToken != Token.TK_IS)
             throw new SyntaxError(pair.getLexema());
 
-        currentNode.addChild(new ProgramTree(pair));
+        currentNode.addChild(new ProgramTree(pair, pair.getLine(), pair.getPosition()));
 
         if (currentToken == Token.TK_EXTENDS) {
             currentNode.addChild(parseClassName());
@@ -71,8 +71,8 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseClassName() {
-        var currentNode = new ProgramTree(SyntaxComponent.CLASS_NAME);
         TokenLexemaPair pair = lexer.nextPair();
+        var currentNode = new ProgramTree(SyntaxComponent.CLASS_NAME, pair.getLine(), pair.getPosition());
 
         if (pair.getToken() == Token.TK_INTEGER ||
                 pair.getToken() == Token.TK_REAL ||
@@ -84,7 +84,7 @@ public class SyntaxAnalyser {
         pair = lexer.currentPair();
         if (pair.getToken() == Token.TK_OPEN_BRACKET) {
             pair = lexer.nextPair();
-            currentNode.addChild(new ProgramTree(pair));
+            currentNode.addChild(new ProgramTree(pair, pair.getLine(), pair.getPosition()));
             currentNode.addChild(parseClassName());
 
             pair = lexer.nextPair();
@@ -95,8 +95,8 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseMembers() {
-        var currentNode = new ProgramTree(SyntaxComponent.MEMBER_DECLARATIONS);
         TokenLexemaPair pair = lexer.currentPair();
+        var currentNode = new ProgramTree(SyntaxComponent.MEMBER_DECLARATIONS, pair.getLine(), pair.getPosition());
 
         while (pair.getToken() != Token.TK_END) {
             currentNode.addChild(parseMember());
@@ -107,8 +107,8 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseMember() {
-        var currentNode = new ProgramTree(SyntaxComponent.MEMBER_DECLARATION);
         TokenLexemaPair pair = lexer.currentPair();
+        var currentNode = new ProgramTree(SyntaxComponent.MEMBER_DECLARATION, pair.getLine(), pair.getPosition());
 
         if (pair.getToken() == Token.TK_VAR) {
             currentNode.addChild(parseVariableDeclaration());
@@ -123,7 +123,7 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseVariableDeclaration() {
-        var currentNode = new ProgramTree(SyntaxComponent.VARIABLE_DECLARATION);
+        var currentNode = new ProgramTree(SyntaxComponent.VARIABLE_DECLARATION, lexer.currentPair().getLine(), lexer.currentPair().getPosition());
         TokenLexemaPair pair = null;
 
         Token[] tokens = {Token.TK_VAR, Token.TK_IDENTIFIER, Token.TK_COLON};
@@ -135,7 +135,7 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseConstructorDeclaration() {
-        var currentNode = new ProgramTree(SyntaxComponent.CONSTRUCTOR_DECLARATION);
+        var currentNode = new ProgramTree(SyntaxComponent.CONSTRUCTOR_DECLARATION, lexer.currentPair().getLine(), lexer.currentPair().getPosition());
         TokenLexemaPair pair = null;
 
         checkToken(currentNode, pair, new Token[]
@@ -162,13 +162,15 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseMethodDeclaration() {
-        var currentNode = new ProgramTree(SyntaxComponent.METHOD_DECLARATION);
+        var currentNode = new ProgramTree(SyntaxComponent.METHOD_DECLARATION, 0, 0);
         TokenLexemaPair pair = null;
 
         checkToken(currentNode, pair, new Token[]
                 {Token.TK_METHOD, Token.TK_IDENTIFIER, Token.TK_OPEN_PAREN});
 
         pair = lexer.currentPair();
+        currentNode.setLine(pair.getLine());
+        currentNode.setLine(pair.getPosition());
 
         if (pair.getToken() != Token.TK_CLOSE_PAREN) {
             currentNode.addChild(parseParameters());
@@ -201,7 +203,7 @@ public class SyntaxAnalyser {
                 pair.getToken() == Token.TK_REAL ||
                 pair.getToken() == Token.TK_ARRAY ||
                 pair.getToken() == Token.TK_IDENTIFIER)
-            return new ProgramTree(pair);
+            return new ProgramTree(pair, pair.getLine(), pair.getPosition());
 
         throw new SyntaxError(pair.getLexema());
     }
@@ -211,13 +213,13 @@ public class SyntaxAnalyser {
 
         if (pair.getToken() == Token.TK_INTEGER ||
                 pair.getToken() == Token.TK_REAL)
-            return new ProgramTree(pair);
+            return new ProgramTree(pair, pair.getLine(), pair.getPosition());
 
         if (pair.getToken() != Token.TK_ARRAY)
             throw new SyntaxError(pair.getLexema());
 
-        var result = new ProgramTree(SyntaxComponent.ARRAY_TYPE);
-        result.addChild(new ProgramTree(pair));
+        var result = new ProgramTree(SyntaxComponent.ARRAY_TYPE, pair.getLine(), pair.getPosition());
+        result.addChild(new ProgramTree(pair, pair.getLine(), pair.getPosition()));
 
         pair = lexer.nextPair();
         checkToken(result, pair, Token.TK_OPEN_BRACKET);
@@ -230,8 +232,8 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseParameters() {
-        var currentNode = new ProgramTree(SyntaxComponent.PARAMETERS);
         TokenLexemaPair pair = lexer.currentPair();
+        var currentNode = new ProgramTree(SyntaxComponent.PARAMETERS, pair.getLine(), pair.getPosition());
 
         while (pair.getToken() != Token.TK_CLOSE_PAREN) {
             currentNode.addChild(parseParameter());
@@ -239,7 +241,7 @@ public class SyntaxAnalyser {
             pair = lexer.currentPair();
 
             if (pair.getToken() == Token.TK_COMMA) {
-                currentNode.addChild(new ProgramTree(pair));
+                currentNode.addChild(new ProgramTree(pair, pair.getLine(), pair.getPosition()));
                 pair = lexer.nextPair();
             }
         }
@@ -248,7 +250,7 @@ public class SyntaxAnalyser {
     }
 
     public ProgramTree parseParameter() {
-        var currentNode = new ProgramTree(SyntaxComponent.VARIABLE_DECLARATION);
+        var currentNode = new ProgramTree(SyntaxComponent.VARIABLE_DECLARATION, lexer.currentPair().getLine(), lexer.currentPair().getPosition());
         TokenLexemaPair pair = null;
 
         Token[] tokens = {Token.TK_IDENTIFIER, Token.TK_COLON};
@@ -260,8 +262,8 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseStatements() {
-        var currentNode = new ProgramTree(SyntaxComponent.STATEMENTS);
         TokenLexemaPair pair = lexer.currentPair();
+        var currentNode = new ProgramTree(SyntaxComponent.STATEMENTS, pair.getLine(), pair.getPosition());
 
         while (pair.getToken() != Token.TK_END &&
                 pair.getToken() != Token.TK_ELSE) {
@@ -273,8 +275,8 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseStatement() {
-        var currentNode = new ProgramTree(SyntaxComponent.STATEMENT);
         TokenLexemaPair pair = lexer.currentPair();
+        var currentNode = new ProgramTree(SyntaxComponent.STATEMENT, pair.getLine(), pair.getPosition());
 
         if (pair.getToken() == Token.TK_VAR) {
             ProgramTree varDecl = parseVariableDeclaration();
@@ -305,7 +307,7 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseAssignment() {
-        var currentNode = new ProgramTree(SyntaxComponent.ASSIGNMENT);
+        var currentNode = new ProgramTree(SyntaxComponent.ASSIGNMENT, lexer.currentPair().getLine(), lexer.currentPair().getPosition());
         TokenLexemaPair pair = null;
 
         checkToken(currentNode, pair, new Token[]
@@ -317,8 +319,8 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseIf() {
-        var currentNode = new ProgramTree(SyntaxComponent.IF_STATEMENT);
         TokenLexemaPair pair = lexer.nextPair();
+        var currentNode = new ProgramTree(SyntaxComponent.IF_STATEMENT, pair.getLine(), pair.getPosition());
 
         checkToken(currentNode, pair, Token.TK_IF);
 
@@ -332,7 +334,7 @@ public class SyntaxAnalyser {
         pair = lexer.nextPair();
 
         if (pair.getToken() == Token.TK_END)
-            currentNode.addChild(new ProgramTree(pair));
+            currentNode.addChild(new ProgramTree(pair, pair.getLine(), pair.getPosition()));
         else {
             checkToken(currentNode, pair, Token.TK_ELSE);
             currentNode.addChild(parseStatements());
@@ -345,8 +347,8 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseWhile() {
-        var currentNode = new ProgramTree(SyntaxComponent.WHILE_LOOP);
         TokenLexemaPair pair = lexer.nextPair();
+        var currentNode = new ProgramTree(SyntaxComponent.WHILE_LOOP, pair.getLine(), pair.getPosition());
 
         checkToken(currentNode, pair, Token.TK_WHILE);
 
@@ -364,8 +366,8 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseReturn() {
-        var currentNode = new ProgramTree(SyntaxComponent.RETURN_STATEMENT);
         TokenLexemaPair pair = lexer.nextPair();
+        var currentNode = new ProgramTree(SyntaxComponent.RETURN_STATEMENT, pair.getLine(), pair.getPosition());
 
         checkToken(currentNode, pair, Token.TK_RETURN);
         currentNode.addChild(parseExpression());
@@ -374,10 +376,12 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseExpression() {
-        var currentNode = new ProgramTree(SyntaxComponent.EXPRESSION);
+        var currentNode = new ProgramTree(SyntaxComponent.EXPRESSION, 0, 0);
         currentNode.addChild(parsePrimary());
 
         TokenLexemaPair pair = lexer.currentPair();
+        currentNode.setLine(pair.getLine());
+        currentNode.setColumn(pair.getPosition());
 
         while (pair.getToken() == Token.TK_DOT) {
             pair = lexer.nextPair();
@@ -399,15 +403,15 @@ public class SyntaxAnalyser {
                 pair.getToken() == Token.TK_BOOLEAN_LITERAL ||
                 pair.getToken() == Token.TK_THIS) {
             pair = lexer.nextPair();
-            return new ProgramTree(pair);
+            return new ProgramTree(pair, pair.getLine(), pair.getPosition());
         }
 
         return parseClassName();
     }
 
     private ProgramTree parseArguments() {
-        var currentNode = new ProgramTree(SyntaxComponent.ARGUMENTS);
         TokenLexemaPair pair = lexer.nextPair();
+        var currentNode = new ProgramTree(SyntaxComponent.ARGUMENTS, pair.getLine(), pair.getPosition());
         checkToken(currentNode, pair, Token.TK_OPEN_PAREN);
         currentNode.addChild(parseExpression());
 
@@ -424,15 +428,15 @@ public class SyntaxAnalyser {
 
     @Deprecated
     private ProgramTree parseExpression1() {
-        var currentNode = new ProgramTree(SyntaxComponent.EXPRESSION);
         ProgramTree left = parseTerm();
 
         TokenLexemaPair pair = lexer.currentPair();
+        var currentNode = new ProgramTree(SyntaxComponent.EXPRESSION, pair.getLine(), pair.getPosition());
 
         while (pair.getToken() == Token.TK_PLUS ||
                 pair.getToken() == Token.TK_MINUS) {
             pair = lexer.nextPair();
-            ProgramTree temp = new ProgramTree(pair);
+            ProgramTree temp = new ProgramTree(pair, pair.getLine(), pair.getPosition());
             temp.addChild(left);
             temp.addChild(parseTerm());
             left = temp;
@@ -446,15 +450,15 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseTerm() {
-        var currentNode = new ProgramTree(SyntaxComponent.TERM);
         ProgramTree left = parseFactor();
 
         TokenLexemaPair pair = lexer.currentPair();
+        var currentNode = new ProgramTree(SyntaxComponent.TERM, pair.getLine(), pair.getPosition());
 
         while (pair.getToken() == Token.TK_MUL ||
                 pair.getToken() == Token.TK_DIV) {
             pair = lexer.nextPair();
-            ProgramTree temp = new ProgramTree(pair);
+            ProgramTree temp = new ProgramTree(pair, pair.getLine(), pair.getPosition());
             temp.addChild(left);
             temp.addChild(parseFactor());
             left = temp;
@@ -468,8 +472,8 @@ public class SyntaxAnalyser {
     }
 
     private ProgramTree parseFactor() {
-        var currentNode = new ProgramTree(SyntaxComponent.FACTOR);
         TokenLexemaPair pair = lexer.nextPair();
+        var currentNode = new ProgramTree(SyntaxComponent.FACTOR, pair.getLine(), pair.getPosition());
 
         if (pair.getToken() == Token.TK_OPEN_PAREN) {
             currentNode.addChild(parseExpression());
@@ -477,8 +481,7 @@ public class SyntaxAnalyser {
             pair = lexer.nextPair();
             if (pair.getToken() != Token.TK_CLOSE_PAREN)
                 throw new SyntaxError(pair.getLexema());
-        }
-        else
+        } else
             checkToken(currentNode, pair, Token.TK_IDENTIFIER);
 
         return currentNode;
