@@ -27,8 +27,8 @@ public enum Token {
     // Identifiers and literals
     TK_BOOLEAN_LITERAL ("true|false"),
     TK_IDENTIFIER ("[a-zA-Z_][a-zA-Z0-9_]*"),
-    TK_INTEGER_LITERAL ("\\d+"),
     TK_REAL_LITERAL ("\\d+\\.\\d+"),
+    TK_INTEGER_LITERAL ("\\d+"),
 
     // Punctuation
 	TK_OPEN_BRACKET ("\\["),
