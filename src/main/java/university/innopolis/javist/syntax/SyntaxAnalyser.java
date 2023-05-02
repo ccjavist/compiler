@@ -418,7 +418,7 @@ public class SyntaxAnalyser {
         pair = lexer.nextPair();
         while (pair.getToken() == Token.TK_COMMA) {
             currentNode.addChild(parseExpression());
-            lexer.nextPair();
+            pair = lexer.nextPair();
         }
 
         checkToken(currentNode, pair, Token.TK_CLOSE_PAREN);

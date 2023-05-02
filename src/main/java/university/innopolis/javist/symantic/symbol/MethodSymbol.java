@@ -31,7 +31,8 @@ public class MethodSymbol extends Symbol {
                     return false;
                 }
             }
+            return true;
         }
-        return true;
+        return false;
     }
 }
