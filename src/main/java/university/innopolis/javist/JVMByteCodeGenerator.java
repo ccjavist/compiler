@@ -1,7 +1,11 @@
 package university.innopolis.javist;
 
 import org.objectweb.asm.*;
+import university.innopolis.javist.lexer.Token;
+import university.innopolis.javist.syntax.NodeValue;
 import university.innopolis.javist.syntax.ProgramTree;
+import university.innopolis.javist.syntax.SyntaxComponent;
+import university.innopolis.javist.syntax.TokenLexemaPair;
 
 import java.io.*;
 
@@ -10,10 +14,10 @@ public class JVMByteCodeGenerator {
     private static final String SUPER_CLASS = "java/lang/Object";
 
     public static void run(ProgramTree tree) throws Exception {
-        ClassWriter cw  = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES);
         cw.visit(51, Opcodes.ACC_PUBLIC, CLASS_NAME, null, SUPER_CLASS, null);
 
-        for (ClassDeclaration classDeclaration : tree.getClassDeclarations()) {
+        for (ProgramTree classDeclaration : tree.getChildren()) {
             generateClassDeclaration(classDeclaration, cw);
         }
 
@@ -24,36 +28,37 @@ public class JVMByteCodeGenerator {
         fos.close();
     }
 
-    public static void generateClassDeclaration(ClassDeclaration classDeclaration, ClassWriter classWriter) throws Exception {
-        for (MemberDeclaration memberDeclaration : classDeclaration.getDeclarations()) {
-            if (memberDeclaration instanceof VariableDeclaration) {
-                generateVariableDeclaration((VariableDeclaration) memberDeclaration, classWriter);
-            } else if (memberDeclaration instanceof MethodDeclaration) {
-                generateMethodDeclaration((MethodDeclaration) memberDeclaration, classWriter);
-            } else if (memberDeclaration instanceof ConstructorDeclaration) {
-                generateConstructorDeclaration((ConstructorDeclaration) memberDeclaration, classWriter);
+    public static void generateClassDeclaration(ProgramTree classDeclaration, ClassWriter classWriter) throws Exception {
+        Integer classBodyPosition = findFirstInChildren(classDeclaration, SyntaxComponent.MEMBER_DECLARATIONS);
+        for (ProgramTree memberDeclaration : classDeclaration.getChild(classBodyPosition).getChildren()) {
+            if (memberDeclaration.getChild(0).getValue() == SyntaxComponent.VARIABLE_DECLARATION) {
+                generateVariableDeclaration(memberDeclaration.getChild(0), classWriter);
+            } else if (memberDeclaration.getChild(0).getValue() == SyntaxComponent.METHOD_DECLARATION) {
+                generateMethodDeclaration(memberDeclaration.getChild(0), classWriter);
+            } else if (memberDeclaration.getChild(0).getValue() == SyntaxComponent.CONSTRUCTOR_DECLARATION) {
+                generateConstructorDeclaration(memberDeclaration.getChild(0), classWriter);
             }
         }
     }
 
-    public static void generateVariableDeclaration(VariableDeclaration variableDeclaration, ClassWriter classWriter) throws Exception {
-        FieldVisitor fv = classWriter.visitField(Opcodes.ACC_PRIVATE, variableDeclaration.getIdentifier(), getTypeDescriptor(variableDeclaration.getExpression()), null, null);
+    public static void generateVariableDeclaration(ProgramTree variableDeclaration, ClassWriter classWriter) throws Exception {
+        FieldVisitor fv = classWriter.visitField(Opcodes.ACC_PRIVATE, (((TokenLexemaPair)variableDeclaration.getChild(findFirstInChildren(variableDeclaration, Token.TK_IDENTIFIER)).getValue()).getLexema(), getTypeDescriptorExpression(variableDeclaration.getChild(findFirstInChildren(variableDeclaration, SyntaxComponent.EXPRESSION))), null, null);
         fv.visitEnd();
     }
 
-    public static void generateMethodDeclaration(MethodDeclaration methodDeclaration, ClassWriter classWriter) throws Exception {
-        MethodVisitor mv = classWriter.visitMethod(Opcodes.ACC_PUBLIC, methodDeclaration.getIdentifier(), getMethodDescriptor(methodDeclaration), null, null);
+    public static void generateMethodDeclaration(ProgramTree methodDeclaration, ClassWriter classWriter) throws Exception {
+        MethodVisitor mv = classWriter.visitMethod(Opcodes.ACC_PUBLIC, (((TokenLexemaPair)methodDeclaration.getChild(findFirstInChildren(methodDeclaration, Token.TK_IDENTIFIER)).getValue()).getLexema(), getMethodDescriptor(methodDeclaration), null, null);
         mv.visitCode();
-
-        for (Statement statement : methodDeclaration.getBody()) {
-            if (statement instanceof Assignment) {
-                generateAssignment((Assignment) statement, mv);
-            } else if (statement instanceof WhileLoop) {
-                generateWhileLoop((WhileLoop) statement, mv);
-            } else if (statement instanceof IfStatement) {
-                generateIfStatement((IfStatement) statement, mv);
-            } else if (statement instanceof ReturnStatement) {
-                generateReturnStatement((ReturnStatement) statement, mv);
+        Integer statementsPosition = findFirstInChildren(methodDeclaration, SyntaxComponent.STATEMENTS);
+        for (ProgramTree statement : methodDeclaration.getChild(statementsPosition).getChildren()) {
+            if (statement.getChild(0).getValue() == SyntaxComponent.ASSIGNMENT) {
+                generateAssignment(statement.getChild(0), mv);
+            } else if (statement.getChild(0).getValue() == SyntaxComponent.WHILE_LOOP) {
+                generateWhileLoop(statement.getChild(0), mv);
+            } else if (statement.getChild(0).getValue() == SyntaxComponent.IF_STATEMENT) {
+                generateIfStatement(statement.getChild(0), mv);
+            } else if (statement.getChild(0).getValue() == SyntaxComponent.RETURN_STATEMENT) {
+                generateReturnStatement(statement.getChild(0), mv);
             }
         }
 
@@ -62,11 +67,11 @@ public class JVMByteCodeGenerator {
         mv.visitEnd();
     }
 
-    public static void generateConstructorDeclaration(ConstructorDeclaration constructorDeclaration, ClassWriter classWriter) throws Exception {
+    public static void generateConstructorDeclaration(ProgramTree constructorDeclaration, ClassWriter classWriter) throws Exception {
         MethodVisitor mv = classWriter.visitMethod(Opcodes.ACC_PUBLIC, "<init>", getMethodDescriptor(constructorDeclaration), null, null);
         mv.visitCode();
 
-        for (Statement statement : constructorDeclaration.getBody()) {
+        for (ProgramTree statement : constructorDeclaration.getBody()) {
             if (statement instanceof Assignment) {
                 generateAssignment((Assignment) statement, mv);
             } else if (statement instanceof WhileLoop) {
@@ -83,13 +88,13 @@ public class JVMByteCodeGenerator {
         mv.visitEnd();
     }
 
-    public static void generateAssignment(Assignment assignment, MethodVisitor methodVisitor) throws Exception {
+    public static void generateAssignment(ProgramTree assignment, MethodVisitor methodVisitor) throws Exception {
         methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
         generateExpression(assignment.getExpression(), methodVisitor);
         methodVisitor.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, assignment.getIdentifier(), getTypeDescriptor(assignment.getExpression()));
     }
 
-    public static void generateWhileLoop(WhileLoop whileLoop, MethodVisitor methodVisitor) throws Exception {
+    public static void generateWhileLoop(ProgramTree whileLoop, MethodVisitor methodVisitor) throws Exception {
         Label startLabel = new Label();
         Label endLabel = new Label();
 
@@ -104,7 +109,7 @@ public class JVMByteCodeGenerator {
         methodVisitor.visitLabel(endLabel);
     }
 
-    public static void generateIfStatement(IfStatement ifStatement, MethodVisitor methodVisitor) throws Exception {
+    public static void generateIfStatement(ProgramTree ifStatement, MethodVisitor methodVisitor) throws Exception {
         Label elseLabel = new Label();
         Label endLabel = new Label();
 
@@ -120,12 +125,12 @@ public class JVMByteCodeGenerator {
         methodVisitor.visitLabel(endLabel);
     }
 
-    public static void generateReturnStatement(ReturnStatement returnStatement, MethodVisitor methodVisitor) throws Exception {
+    public static void generateReturnStatement(ProgramTree returnStatement, MethodVisitor methodVisitor) throws Exception {
         generateExpression(returnStatement.getExpression(), methodVisitor);
         methodVisitor.visitInsn(Opcodes.IRETURN);
     }
 
-    public static void generateBody(List<Statement> body, MethodVisitor methodVisitor) throws Exception {
+    public static void generateBody(List<ProgramTree> body, MethodVisitor methodVisitor) throws Exception {
         for (Statement statement : body) {
             if (statement instanceof Assignment) {
                 generateAssignment((Assignment) statement, methodVisitor);
@@ -139,13 +144,13 @@ public class JVMByteCodeGenerator {
         }
     }
 
-    public static void generateExpression(Expression expression, MethodVisitor methodVisitor) throws Exception {
+    public static void generateExpression(ProgramTree expression, MethodVisitor methodVisitor) throws Exception {
         if (expression instanceof Primary) {
             generatePrimary((Primary) expression, methodVisitor);
         }
     }
 
-    public static void generatePrimary(Primary primary, MethodVisitor methodVisitor) throws Exception {
+    public static void generatePrimary(ProgramTree primary, MethodVisitor methodVisitor) throws Exception {
         if (primary instanceof IntegerLiteral) {
             generateIntegerLiteral((IntegerLiteral) primary, methodVisitor);
         } else if (primary instanceof RealLiteral) {
@@ -159,29 +164,29 @@ public class JVMByteCodeGenerator {
         }
     }
 
-    public static void generateIntegerLiteral(IntegerLiteral integerLiteral, MethodVisitor methodVisitor) throws Exception {
+    public static void generateIntegerLiteral(ProgramTree integerLiteral, MethodVisitor methodVisitor) throws Exception {
         methodVisitor.visitLdcInsn(integerLiteral.getValue());
     }
 
-    public static void generateRealLiteral(RealLiteral realLiteral, MethodVisitor methodVisitor) throws Exception {
+    public static void generateRealLiteral(ProgramTree realLiteral, MethodVisitor methodVisitor) throws Exception {
         methodVisitor.visitLdcInsn(realLiteral.getValue());
     }
 
-    public static void generateBooleanLiteral(BooleanLiteral booleanLiteral, MethodVisitor methodVisitor) throws Exception {
+    public static void generateBooleanLiteral(ProgramTree booleanLiteral, MethodVisitor methodVisitor) throws Exception {
         methodVisitor.visitLdcInsn(booleanLiteral.getValue());
     }
 
-    public static void generateThis(This thisObject, MethodVisitor methodVisitor) throws Exception {
+    public static void generateThis(ProgramTree thisObject, MethodVisitor methodVisitor) throws Exception {
         methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
     }
 
-    public static void generateClassName(ClassName className, MethodVisitor methodVisitor) throws Exception {
+    public static void generateClassName(ProgramTree className, MethodVisitor methodVisitor) throws Exception {
         methodVisitor.visitTypeInsn(Opcodes.NEW, className.getName());
         methodVisitor.visitInsn(Opcodes.DUP);
         methodVisitor.visitMethodInsn(Opcodes.INVOKESPECIAL, className.getName(), "<init>", "()V", false);
     }
 
-    public static String getTypeDescriptor(Expression expression) {
+    public static String getTypeDescriptorExpression(ProgramTree expression) {
         if (expression instanceof Primary) {
             return getTypeDescriptor((Primary) expression);
         }
@@ -189,11 +194,11 @@ public class JVMByteCodeGenerator {
         return "V";
     }
 
-    public static String getMethodDescriptor(MethodDeclaration methodDeclaration) {
+    public static String getMethodDescriptor(ProgramTree methodDeclaration) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("(");
-        for (ParameterDeclaration parameterDeclaration : methodDeclaration.getParameters()) {
+        for (ProgramTree parameterDeclaration : methodDeclaration.getParameters()) {
             sb.append(getTypeDescriptor(parameterDeclaration.getClassName()));
         }
         sb.append(")");
@@ -207,11 +212,11 @@ public class JVMByteCodeGenerator {
         return sb.toString();
     }
 
-    public static String getMethodDescriptor(ConstructorDeclaration constructorDeclaration) {
+    public static String getMethodConstructorDescriptor(ProgramTree constructorDeclaration) {
         StringBuilder sb = new StringBuilder();
 
         sb.append("(");
-        for (ParameterDeclaration parameterDeclaration : constructorDeclaration.getParameters()) {
+        for (ProgramTree parameterDeclaration : constructorDeclaration.getParameters()) {
             sb.append(getTypeDescriptor(parameterDeclaration.getClassName()));
         }
         sb.append(")V");
@@ -219,7 +224,7 @@ public class JVMByteCodeGenerator {
         return sb.toString();
     }
 
-    public static String getTypeDescriptor(Primary primary) {
+    public static String getTypeDescriptor(ProgramTree primary) {
         if (primary instanceof IntegerLiteral) {
             return "I";
         } else if (primary instanceof RealLiteral) {
@@ -235,7 +240,28 @@ public class JVMByteCodeGenerator {
         return "V";
     }
 
-    public static String getTypeDescriptor(ClassName className) {
-        return "L" + className.getName() + ";";
+//    public static String getTypeDescriptor(ProgramTree className) {
+//        return "L" + className.getName() + ";";
+//    }
+
+    private static Integer findFirstInChildren(ProgramTree parent, Token token) {
+        for (int i = 0; i < parent.getChildrenCount(); i++) {
+            NodeValue current = parent.getChild(i).getValue();
+            if (current instanceof TokenLexemaPair) {
+                if (((TokenLexemaPair) current).getToken() == token) {
+                    return i;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static Integer findFirstInChildren(ProgramTree parent, SyntaxComponent syntaxComponent) {
+        for (int i = 0; i < parent.getChildrenCount(); i++) {
+            if (parent.getChild(i).getValue() == syntaxComponent) {
+                return i;
+            }
+        }
+        return null;
     }
 }

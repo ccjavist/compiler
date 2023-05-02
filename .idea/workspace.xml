@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5c7f7103-e8e5-449f-b206-0cf67cb2262c" name="Changes" comment="Fix method's equals method">
-      <change afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/JVMByteCodeGenerator.java" afterDir="false" />
+    <list default="true" id="5c7f7103-e8e5-449f-b206-0cf67cb2262c" name="Changes" comment="Fix class name">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/JVMByteCodeGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/JVMByteCodeGenerator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +110,7 @@
       <workItem from="1681723958367" duration="163000" />
       <workItem from="1682764304574" duration="3103000" />
       <workItem from="1682837698335" duration="40000" />
-      <workItem from="1683034080542" duration="8469000" />
+      <workItem from="1683034080542" duration="11692000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize project">
       <created>1675859096991</created>
@@ -211,7 +210,21 @@
       <option name="project" value="LOCAL" />
       <updated>1682766871904</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Create JVM byte code generator">
+      <created>1683057617222</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1683057617222</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Fix class name">
+      <created>1683057713444</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1683057713444</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -254,7 +267,9 @@
     <MESSAGE value="Update code for test" />
     <MESSAGE value="Fix arguments parser" />
     <MESSAGE value="Fix method's equals method" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix method's equals method" />
+    <MESSAGE value="Create JVM byte code generator" />
+    <MESSAGE value="Fix class name" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix class name" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
