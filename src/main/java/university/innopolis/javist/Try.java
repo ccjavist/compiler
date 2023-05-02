@@ -8,7 +8,7 @@ import university.innopolis.javist.syntax.SyntaxAnalyser;
 
 public class Try {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 //         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test1.txt");
          testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test2.txt");
 //         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test3.txt");
@@ -21,9 +21,11 @@ public class Try {
         printAST(syntaxAnalyser.makeTree(), 0);
     }
 
-    public static void testSemanticAnalyzer(String filepath) {
+    public static void testSemanticAnalyzer(String filepath) throws Exception {
+        ProgramTree tree;
         Lexer lexer = new Lexer(filepath);
         SyntaxAnalyser syntaxAnalyser = new SyntaxAnalyser(lexer);
+        tree =  new SyntaxAnalyser(lexer).makeTree();
         SemanticAnalyzer semanticAnalyzer;
         try{
             semanticAnalyzer = new SemanticAnalyzer(syntaxAnalyser.makeTree());
@@ -33,6 +35,7 @@ public class Try {
         }
         semanticAnalyzer.analyzePredefinedLibraries("src/main/resources/sources/Libraries.txt");
         semanticAnalyzer.analyze();
+        JVMByteCodeGenerator.run(tree);
     }
 
     public static void printAST(ProgramTree node, int depth) {

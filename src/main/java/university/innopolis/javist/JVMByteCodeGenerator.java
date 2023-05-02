@@ -43,12 +43,12 @@ public class JVMByteCodeGenerator {
     }
 
     public static void generateVariableDeclaration(ProgramTree variableDeclaration, ClassWriter classWriter) throws Exception {
-        FieldVisitor fv = classWriter.visitField(Opcodes.ACC_PRIVATE, ((TokenLexemaPair)variableDeclaration.getChild(findFirstInChildren(variableDeclaration, Token.TK_IDENTIFIER)).getValue()).getLexema(), getTypeDescriptorExpression(variableDeclaration.getChild(findFirstInChildren(variableDeclaration, SyntaxComponent.EXPRESSION))), null, null);
+        FieldVisitor fv = classWriter.visitField(Opcodes.ACC_PRIVATE, ((TokenLexemaPair) variableDeclaration.getChild(findFirstInChildren(variableDeclaration, Token.TK_IDENTIFIER)).getValue()).getLexema(), getTypeDescriptorExpression(variableDeclaration.getChild(findFirstInChildren(variableDeclaration, SyntaxComponent.EXPRESSION))), null, null);
         fv.visitEnd();
     }
 
     public static void generateMethodDeclaration(ProgramTree methodDeclaration, ClassWriter classWriter) throws Exception {
-        MethodVisitor mv = classWriter.visitMethod(Opcodes.ACC_PUBLIC, ((TokenLexemaPair)methodDeclaration.getChild(findFirstInChildren(methodDeclaration, Token.TK_IDENTIFIER)).getValue()).getLexema(), getMethodDescriptor(methodDeclaration), null, null);
+        MethodVisitor mv = classWriter.visitMethod(Opcodes.ACC_PUBLIC, ((TokenLexemaPair) methodDeclaration.getChild(findFirstInChildren(methodDeclaration, Token.TK_IDENTIFIER)).getValue()).getLexema(), getMethodDescriptor(methodDeclaration), null, null);
         mv.visitCode();
         Integer statementsPosition = findFirstInChildren(methodDeclaration, SyntaxComponent.STATEMENTS);
         for (ProgramTree statement : methodDeclaration.getChild(statementsPosition).getChildren()) {
@@ -78,7 +78,7 @@ public class JVMByteCodeGenerator {
         methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
         Integer expressionPosition = findFirstInChildren(assignment, SyntaxComponent.EXPRESSION);
         generateExpression(assignment.getChild(expressionPosition), methodVisitor);
-        methodVisitor.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, ((TokenLexemaPair)assignment.getChild(findFirstInChildren(assignment, Token.TK_IDENTIFIER)).getValue()).getLexema(), getTypeDescriptor(assignment.getChild(expressionPosition)));
+        methodVisitor.visitFieldInsn(Opcodes.PUTFIELD, CLASS_NAME, ((TokenLexemaPair) assignment.getChild(findFirstInChildren(assignment, Token.TK_IDENTIFIER)).getValue()).getLexema(), getTypeDescriptorExpression(assignment.getChild(expressionPosition)));
     }
 
     public static void generateWhileLoop(ProgramTree whileLoop, MethodVisitor methodVisitor) throws Exception {
@@ -139,100 +139,68 @@ public class JVMByteCodeGenerator {
     }
 
     public static void generateExpression(ProgramTree expression, MethodVisitor methodVisitor) throws Exception {
-        if (((TokenLexemaPair)expression.getChild(0).getValue()).getToken() == Token.TK_BOOLEAN_LITERAL ||
-        ((TokenLexemaPair)expression.getChild(0).getValue()).getToken() == Token.TK_REAL_LITERAL ||
-        ((TokenLexemaPair)expression.getChild(0).getValue()).getToken() == Token.TK_INTEGER_LITERAL) {
-            generatePrimary(expression.getChild(0), methodVisitor);
-        }
-        for (int i = 0; i < expression.getIdentifiers().size(); i++) {
-            Identifier identifier = expression.getIdentifiers().get(i);
-            Arguments arguments = expression.getArguments().get(i);
-            generateArguments(arguments, methodVisitor);
-            methodVisitor.visitMethodInsn(Opcodes.INVOKESTATIC, CLASS_NAME, identifier, getMethodDescriptor(arguments));
+        generatePrimary(expression.getChild(0), methodVisitor);
+    }
+
+    public static void generatePrimary(ProgramTree primary, MethodVisitor methodVisitor) {
+        if (primary.getValue() instanceof TokenLexemaPair) {
+            if (((TokenLexemaPair) primary.getValue()).getToken() == Token.TK_THIS) {
+                methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
+            }
+            else if (((TokenLexemaPair) primary.getValue()).getToken() == Token.TK_BOOLEAN_LITERAL) {
+                methodVisitor.visitLdcInsn(Boolean.valueOf(((TokenLexemaPair) primary.getValue()).getLexema()));
+            } else if (((TokenLexemaPair) primary.getValue()).getToken() == Token.TK_REAL_LITERAL) {
+                methodVisitor.visitLdcInsn(Double.valueOf(((TokenLexemaPair) primary.getValue()).getLexema()));
+            } else if (((TokenLexemaPair) primary.getValue()).getToken() == Token.TK_INTEGER_LITERAL) {
+                methodVisitor.visitLdcInsn(Integer.valueOf(((TokenLexemaPair) primary.getValue()).getLexema()));
+            }
         }
     }
 
-    public static void generatePrimary(ProgramTree primary, MethodVisitor methodVisitor) throws Exception {
-        if (primary instanceof IntegerLiteral) {
-            IntegerLiteral integerLiteral = (IntegerLiteral) primary;
-            methodVisitor.visitIntInsn(Opcodes.BIPUSH, integerLiteral.getValue());
-        } else if (primary instanceof RealLiteral) {
-            RealLiteral realLiteral = (RealLiteral) primary;
-            methodVisitor.visitLdcInsn(realLiteral.getValue());
-        } else if (primary instanceof BooleanLiteral) {
-            BooleanLiteral booleanLiteral = (BooleanLiteral) primary;
-            methodVisitor.visitInsn(booleanLiteral.getValue() ? Opcodes.ICONST_1 : Opcodes.ICONST_0);
-        } else if (primary instanceof This) {
-            methodVisitor.visitVarInsn(Opcodes.ALOAD, 0);
-        } else if (primary instanceof ClassName) {
-            ClassName className = (ClassName) primary;
-            methodVisitor.visitTypeInsn(Opcodes.NEW, getTypeDescriptor(className));
-            methodVisitor.visitInsn(Opcodes.DUP);
-            methodVisitor.visitMethodInsn(Opcodes.INVOKESPECIAL, getTypeDescriptor(className), "<init>", "()V");
+    public static void generateArguments(ProgramTree arguments, MethodVisitor methodVisitor) throws Exception {
+        for (int i = 0; i < arguments.getChildren().size(); i++) {
+            Integer expressionPosition = findFirstInChildren(arguments.getChild(i), SyntaxComponent.EXPRESSION);
+            generateExpression(arguments.getChild(i).getChild(expressionPosition), methodVisitor);
         }
     }
 
-    public static void generateArguments(Arguments arguments, MethodVisitor methodVisitor) throws Exception {
-        for (Expression expression : arguments.getExpressions()) {
-            generateExpression(expression, methodVisitor);
+    public static String getMethodDescriptor(ProgramTree methodDeclaration) throws Exception {
+        StringBuilder descriptor = new StringBuilder("(");
+        Integer parametersPosition = findFirstInChildren(methodDeclaration, SyntaxComponent.PARAMETERS);
+        for (ProgramTree parameter : methodDeclaration.getChild(parametersPosition).getChildren()) {
+            if (parameter.getValue() != SyntaxComponent.VARIABLE_DECLARATION) {
+                continue;
+            }
+            Integer classNamePosition = findFirstInChildren(parameter, SyntaxComponent.CLASS_NAME);
+            descriptor.append(getTypeDescriptorExpression(parameter.getChild(classNamePosition)));
         }
+        descriptor.append(")");
+        Integer returnTypePosition = findFirstInChildren(methodDeclaration, Token.TK_COLON) + 1;
+        descriptor.append(getTypeDescriptorExpression(methodDeclaration.getChild(returnTypePosition)));
+        return descriptor.toString();
     }
 
-    public static String getTypeDescriptor(Expression expression) {
-        if (expression instanceof IntegerLiteral) {
-            return "I";
-        } else if (expression instanceof RealLiteral) {
-            return "D";
-        } else if (expression instanceof BooleanLiteral) {
+    public static String getTypeDescriptorExpression(ProgramTree expression) throws Exception {
+        if (expression.getChildrenCount() == 0) {
+            if (expression.getValue() instanceof TokenLexemaPair) {
+                return ((TokenLexemaPair) expression.getValue()).getLexema();
+            }
+            return "";
+        }
+        if (expression.getChild(0).getValue() instanceof TokenLexemaPair && ((TokenLexemaPair) expression.getChild(0).getValue()).getToken() == Token.TK_BOOLEAN_LITERAL) {
             return "Z";
-        } else if (expression instanceof This) {
-            return CLASS_NAME;
-        } else if (expression instanceof ClassName) {
-            ClassName className = (ClassName) expression;
-            return getTypeDescriptor(className);
+        } else if (expression.getChild(0).getValue() instanceof TokenLexemaPair && ((TokenLexemaPair) expression.getChild(0).getValue()).getToken() == Token.TK_INTEGER_LITERAL) {
+            return "I";
+        } else if (expression.getChild(0).getValue() instanceof TokenLexemaPair && ((TokenLexemaPair) expression.getChild(0).getValue()).getToken() == Token.TK_REAL_LITERAL) {
+            return "D";
+        } else if (expression.getChild(0).getValue() instanceof TokenLexemaPair && ((TokenLexemaPair) expression.getChild(0).getValue()).getToken() == Token.TK_THIS) {
+            return "L" + CLASS_NAME + ";";
+        } else if (expression.getChild(0).getValue() instanceof TokenLexemaPair && ((TokenLexemaPair) expression.getChild(0).getValue()).getToken() == Token.TK_IDENTIFIER) {
+            return "L" + ((TokenLexemaPair) expression.getChild(0).getValue()).getLexema() + ";";
         }
-        return null;
+        return "";
     }
 
-    public static String getTypeDescriptor(ClassName className) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < className.getDimensions(); i++) {
-            sb.append("[");
-        }
-        sb.append(className.getIdentifier());
-        return sb.toString();
-    }
-
-    public static String getMethodDescriptor(MethodDeclaration methodDeclaration) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("(");
-        for (ParameterDeclaration parameterDeclaration : methodDeclaration.getParameters()) {
-            sb.append(getTypeDescriptor(parameterDeclaration.getClassName()));
-        }
-        sb.append(")");
-        sb.append(getTypeDescriptor(methodDeclaration.getReturnType()));
-        return sb.toString();
-    }
-
-    public static String getMethodDescriptor(ConstructorDeclaration constructorDeclaration) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("(");
-        for (ParameterDeclaration parameterDeclaration : constructorDeclaration.getParameters()) {
-            sb.append(getTypeDescriptor(parameterDeclaration.getClassName()));
-        }
-        sb.append(")V");
-        return sb.toString();
-    }
-
-    public static String getMethodDescriptor(Arguments arguments) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("(");
-        for (Expression expression : arguments.getExpressions()) {
-            sb.append(getTypeDescriptor(expression));
-        }
-        sb.append(")I");
-        return sb.toString();
-    }
     private static Integer findFirstInChildren(ProgramTree parent, Token token) {
         for (int i = 0; i < parent.getChildrenCount(); i++) {
             NodeValue current = parent.getChild(i).getValue();

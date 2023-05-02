@@ -7,6 +7,8 @@
     <list default="true" id="5c7f7103-e8e5-449f-b206-0cf67cb2262c" name="Changes" comment="Fix generators">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/JVMByteCodeGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/JVMByteCodeGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/Try.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/Try.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/sources/SemanticTests/Test2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/sources/SemanticTests/Test2.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +113,7 @@
       <workItem from="1681723958367" duration="163000" />
       <workItem from="1682764304574" duration="3103000" />
       <workItem from="1682837698335" duration="40000" />
-      <workItem from="1683034080542" duration="16249000" />
+      <workItem from="1683034080542" duration="18752000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize project">
       <created>1675859096991</created>
@@ -232,7 +234,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683061590783</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Fix generators">
+      <created>1683069107405</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1683069107405</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -279,46 +288,5 @@
     <MESSAGE value="Fix class name" />
     <MESSAGE value="Fix generators" />
     <option name="LAST_COMMIT_MESSAGE" value="Fix generators" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java</url>
-          <line>25</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java</url>
-          <line>315</line>
-          <option name="timeStamp" value="78" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java</url>
-          <line>242</line>
-          <option name="timeStamp" value="79" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java</url>
-          <line>300</line>
-          <option name="timeStamp" value="80" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java</url>
-          <line>301</line>
-          <option name="timeStamp" value="81" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/SemanticAnalyzer.java</url>
-          <line>309</line>
-          <option name="timeStamp" value="82" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/symantic/symbol/ClassSymbol.java</url>
-          <line>52</line>
-          <option name="timeStamp" value="83" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

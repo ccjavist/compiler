@@ -6,7 +6,7 @@ class Something is
 
     method calculate(a: Something, b: Integer) : Integer is
         var x: Something
-        x := a.test(b, 1)
+        x := a.test(b)
         return b
     end
 end
