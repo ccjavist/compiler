@@ -1,9 +1,11 @@
+package university.innopolis.javist;
+
 import org.objectweb.asm.*;
 import university.innopolis.javist.syntax.ProgramTree;
 
 import java.io.*;
 
-public class JV<Byte {
+public class JVMByteCodeGenerator {
     private static final String CLASS_NAME = "Something";
     private static final String SUPER_CLASS = "java/lang/Object";
 
