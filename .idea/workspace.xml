@@ -7,8 +7,6 @@
     <list default="true" id="5c7f7103-e8e5-449f-b206-0cf67cb2262c" name="Changes" comment="Fix generators">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/JVMByteCodeGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/JVMByteCodeGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/Try.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/university/innopolis/javist/Try.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/sources/SemanticTests/Test2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/sources/SemanticTests/Test2.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,7 +111,7 @@
       <workItem from="1681723958367" duration="163000" />
       <workItem from="1682764304574" duration="3103000" />
       <workItem from="1682837698335" duration="40000" />
-      <workItem from="1683034080542" duration="18752000" />
+      <workItem from="1683034080542" duration="19837000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize project">
       <created>1675859096991</created>
@@ -241,7 +239,14 @@
       <option name="project" value="LOCAL" />
       <updated>1683069107405</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Fix generators">
+      <created>1683071558558</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1683071558558</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -288,5 +293,16 @@
     <MESSAGE value="Fix class name" />
     <MESSAGE value="Fix generators" />
     <option name="LAST_COMMIT_MESSAGE" value="Fix generators" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/university/innopolis/javist/JVMByteCodeGenerator.java</url>
+          <line>80</line>
+          <option name="timeStamp" value="88" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

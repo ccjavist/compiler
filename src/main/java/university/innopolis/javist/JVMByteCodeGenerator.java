@@ -198,7 +198,7 @@ public class JVMByteCodeGenerator {
         } else if (expression.getChild(0).getValue() instanceof TokenLexemaPair && ((TokenLexemaPair) expression.getChild(0).getValue()).getToken() == Token.TK_IDENTIFIER) {
             return "L" + ((TokenLexemaPair) expression.getChild(0).getValue()).getLexema() + ";";
         }
-        return "";
+        return "V";
     }
 
     private static Integer findFirstInChildren(ProgramTree parent, Token token) {
