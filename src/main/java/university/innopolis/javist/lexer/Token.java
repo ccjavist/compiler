@@ -5,6 +5,10 @@ import lombok.Getter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Contains all types of tokens that can be met in the O-language.
+ * Used for simple checking and parsing the string data into tokens.
+ */
 public enum Token {
     TK_CLASS ("class"),
     TK_EXTENDS ("extends"),

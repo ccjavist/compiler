@@ -50,10 +50,10 @@ public class ProgramTree {
         return value;
     }
 
-//    public String toString(StringBuilder [] result) {
-//
-//    }
-
+    /**
+     * Makes a good string visualisation of the AST.
+     * @return A string containing all the nodes of the tree.
+     */
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
