@@ -11,15 +11,29 @@ import university.innopolis.javist.syntax.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The SemanticAnalyzer class is responsible for performing semantic analysis on a program tree.
+ * It analyzes the structure and validity of the program's syntax and symbols.
+ */
 public class SemanticAnalyzer {
     private final ProgramTree root;
 
     private final SymbolTable symbolTable = new SymbolTable();
 
+    /**
+     * Constructs a SemanticAnalyzer object with the specified program tree.
+     *
+     * @param root The root of the program tree to be analyzed.
+     */
     public SemanticAnalyzer(ProgramTree root) {
         this.root = root;
     }
 
+    /**
+     * Performs semantic analysis on the program tree.
+     *
+     * @throws SemanticError if a semantic error is encountered during analysis.
+     */
     public void analyze() throws SemanticError {
         try {
             if (root.getValue() == SyntaxComponent.PROGRAM) {
@@ -32,6 +46,12 @@ public class SemanticAnalyzer {
         }
     }
 
+    /**
+     * Analyzes the predefined libraries specified by the given path.
+     *
+     * @param pathToPredefinedLibraries The path to the predefined libraries.
+     * @throws SemanticError if a semantic error is encountered during analysis.
+     */
     public void analyzePredefinedLibraries(String pathToPredefinedLibraries) {
         Lexer lexer = new Lexer(pathToPredefinedLibraries);
         ProgramTree predefinedAST = new SyntaxAnalyser(lexer).makeTree();
@@ -42,6 +62,12 @@ public class SemanticAnalyzer {
         }
     }
 
+    /**
+     * Analyzes the program represented by the given program tree.
+     *
+     * @param node The program tree node representing the program.
+     * @throws SemanticError if a semantic error is encountered during analysis.
+     */
     private void analyzeProgram(ProgramTree node) throws SemanticError {
         fetchTypes(node);
         for (ProgramTree child : node.getChildren()) {
@@ -53,6 +79,11 @@ public class SemanticAnalyzer {
         }
     }
 
+    /**
+     * Fetches the types defined in the program represented by the given program tree.
+     *
+     * @param node The program tree node representing the program.
+     */
     private void fetchTypes(ProgramTree node) {
         for (ProgramTree child : node.getChildren()) {
             String className = null;
@@ -74,6 +105,12 @@ public class SemanticAnalyzer {
         }
     }
 
+    /**
+     * Analyzes a class declaration represented by the given program tree node.
+     *
+     * @param node The program tree node representing the class declaration.
+     * @throws SemanticError if a semantic error is encountered during analysis.
+     */
     private void analyzeClassDeclaration(ProgramTree node) throws SemanticError {
         String className = null;
         for (ProgramTree child : node.getChildren()) {
@@ -91,6 +128,14 @@ public class SemanticAnalyzer {
         analyzeClassBody(bodyNode, className);
     }
 
+
+    /**
+     * Analyzes the body of a class represented by the given program tree node.
+     *
+     * @param node      The program tree node representing the class body.
+     * @param className The name of the class being analyzed.
+     * @throws SemanticError if a semantic error is encountered during analysis.
+     */
     private void analyzeClassBody(ProgramTree node, String className) throws SemanticError {
         if (node.getValue() == SyntaxComponent.MEMBER_DECLARATIONS) {
             for (ProgramTree child : node.getChildren()) {
@@ -108,6 +153,13 @@ public class SemanticAnalyzer {
         }
     }
 
+    /**
+     * Analyzes a variable declaration represented by the given program tree node.
+     *
+     * @param node      The program tree node representing the variable declaration.
+     * @param className The name of the class in which the variable is declared.
+     * @throws SemanticError if a semantic error is encountered during analysis.
+     */
     private void analyzeVariableDeclaration(ProgramTree node, String className) throws SemanticError {
         ProgramTree nameNode = node.getChild(1);
         if (!(nameNode.getValue() instanceof TokenLexemaPair)) {
@@ -131,6 +183,13 @@ public class SemanticAnalyzer {
         classSymbol.getVariables().put(variableName, new VariableSymbol(variableName, variableType));
     }
 
+    /**
+     * Analyzes a method declaration represented by the given program tree node.
+     *
+     * @param node      The program tree node representing the method declaration.
+     * @param className The name of the class in which the method is declared.
+     * @throws SemanticError if a semantic error is encountered during analysis.
+     */
     private void analyzeMethodDeclaration(ProgramTree node, String className) throws SemanticError {
         Integer nameNodePosition = findFirstInChildren(node, Token.TK_IDENTIFIER);
         Integer closeParenPosition = findFirstInChildren(node, Token.TK_CLOSE_PAREN);
@@ -166,6 +225,13 @@ public class SemanticAnalyzer {
         }
     }
 
+    /**
+     * Analyzes a constructor declaration represented by the given program tree node.
+     *
+     * @param node      The program tree node representing the constructor declaration.
+     * @param className The name of the class in which the constructor is declared.
+     * @throws SemanticError if a semantic error is encountered during analysis.
+     */
     private void analyzeConstructorDeclaration(ProgramTree node, String className) throws SemanticError {
         ProgramTree nameNode = node.getChild(0);
         TokenLexemaPair namePair = (TokenLexemaPair) nameNode.getValue();
@@ -173,6 +239,14 @@ public class SemanticAnalyzer {
         // TODO: args reload
     }
 
+    /**
+     * Analyzes statements within a method or constructor.
+     *
+     * @param node         The program tree node representing the statements.
+     * @param className    The name of the class in which the statements are analyzed.
+     * @param scope        The scope in which the statements are analyzed.
+     * @param methodSymbol The method symbol representing the method or constructor.
+     */
     private void analyzeStatements(ProgramTree node, String className, Scope scope, MethodSymbol methodSymbol) {
         ClassSymbol classSymbol = (ClassSymbol) symbolTable.get(className);
         for (ProgramTree statement : node.getChildren()) {
@@ -209,6 +283,15 @@ public class SemanticAnalyzer {
         }
     }
 
+    /**
+     * Analyzes a variable declaration within a scope.
+     *
+     * @param node      The program tree node representing the variable declaration.
+     * @param className The name of the class in which the variable is declared.
+     * @param scope     The scope in which the variable is declared.
+     * @return The variable symbol representing the analyzed variable.
+     * @throws SemanticError if a semantic error is encountered during analysis.
+     */
     private VariableSymbol analyzeVariableInScope(ProgramTree node, String className, Scope scope) {
         Integer variableNamePosition = findFirstInChildren(node, Token.TK_IDENTIFIER);
         Integer expressionPosition = findFirstInChildren(node, SyntaxComponent.EXPRESSION);
@@ -225,6 +308,14 @@ public class SemanticAnalyzer {
         return new VariableSymbol(variableName, type);
     }
 
+    /**
+     * Analyzes an assignment within a scope.
+     *
+     * @param node      The program tree node representing the assignment.
+     * @param className The name of the class in which the assignment occurs.
+     * @param scope     The scope in which the assignment occurs.
+     * @return The variable symbol representing the assigned variable.
+     */
     private VariableSymbol analyzeAssigmentInScope(ProgramTree node, String className, Scope scope) {
         String variableName = null;
         String variableType = null;
@@ -243,6 +334,16 @@ public class SemanticAnalyzer {
         return new VariableSymbol(variableName, variableType);
     }
 
+    /**
+     * Parses an expression recursively.
+     *
+     * @param nodes       The list of program tree nodes representing the expression.
+     * @param className   The name of the current class.
+     * @param scope       The current scope.
+     * @param currentType The current type being evaluated in the expression.
+     * @return The type of the expression.
+     * @throws SemanticError if a semantic error is encountered during parsing.
+     */
     private String parseExpression(List<ProgramTree> nodes, String className, Scope scope, String currentType) {
         if (nodes.size() == 0 && currentType == null) {
             throw new SemanticError(Constants.INVALID_EXPRESSION, 0, 0);
@@ -316,6 +417,14 @@ public class SemanticAnalyzer {
         return parseExpression(nodes, className, scope, resultType);
     }
 
+    /**
+     * Parses the parameters of a method or constructor.
+     *
+     * @param node      The program tree node representing the parameters.
+     * @param className The name of the current class.
+     * @param scope     The current scope.
+     * @return The list of parameter symbols.
+     */
     private List<ParameterSymbol> parseParameters(ProgramTree node, String className, Scope scope) {
         List<ParameterSymbol> result = new ArrayList<>();
         for (ProgramTree child : node.getChildren()) {
@@ -326,6 +435,13 @@ public class SemanticAnalyzer {
         return result;
     }
 
+    /**
+     * Finds the index of the first child node with the specified syntax component value.
+     *
+     * @param parent          The parent program tree node.
+     * @param syntaxComponent The syntax component value to search for.
+     * @return The index of the first matching child node, or null if not found.
+     */
     private Integer findFirstInChildren(ProgramTree parent, SyntaxComponent syntaxComponent) {
         for (int i = 0; i < parent.getChildrenCount(); i++) {
             if (parent.getChild(i).getValue() == syntaxComponent) {
@@ -335,6 +451,13 @@ public class SemanticAnalyzer {
         return null;
     }
 
+    /**
+     * Finds the index of the first child node with the specified token value.
+     *
+     * @param parent The parent program tree node.
+     * @param token  The token value to search for.
+     * @return The index of the first matching child node, or null if not found.
+     */
     private Integer findFirstInChildren(ProgramTree parent, Token token) {
         for (int i = 0; i < parent.getChildrenCount(); i++) {
             NodeValue current = parent.getChild(i).getValue();
@@ -347,6 +470,12 @@ public class SemanticAnalyzer {
         return null;
     }
 
+    /**
+     * Analyzes the parameters of a method or constructor declaration.
+     *
+     * @param parent The program tree node representing the parameters.
+     * @return The list of parameter symbols.
+     */
     private List<ParameterSymbol> analyzeParameters(ProgramTree parent) {
         List<ParameterSymbol> result = new ArrayList<>();
         for (ProgramTree child : parent.getChildren()) {
@@ -360,6 +489,15 @@ public class SemanticAnalyzer {
         return result;
     }
 
+    /**
+     * Checks if a method with the given name and parameters exists in a class and returns its return type.
+     *
+     * @param className  The name of the class.
+     * @param methodName The name of the method.
+     * @param parameters The list of parameter symbols.
+     * @return The return type of the method.
+     * @throws SemanticError If the method is not found in the class.
+     */
     private String checkMethod(String className, String methodName, List<ParameterSymbol> parameters) {
         ClassSymbol classSymbol = (ClassSymbol) this.symbolTable.get(className);
         if (!classSymbol.isMethodExists(methodName, parameters)) {
