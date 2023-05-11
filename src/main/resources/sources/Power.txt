@@ -1,0 +1,13 @@
+class Power is
+    method calculate(num: Integer, pow: Integer) : Integer is
+        var currentPow: Integer(0)
+        var currentNum: Integer(1)
+
+        while currentPow.Less(pow) loop
+            currentNum := currentNum.Mult(num)
+            currentPow := currentPow.Plus(1)
+        end
+
+        return currentNum
+    end
+end
