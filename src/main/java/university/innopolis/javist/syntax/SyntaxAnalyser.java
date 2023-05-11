@@ -413,7 +413,9 @@ public class SyntaxAnalyser {
         TokenLexemaPair pair = lexer.nextPair();
         var currentNode = new ProgramTree(SyntaxComponent.ARGUMENTS, pair.getLine(), pair.getPosition());
         checkToken(currentNode, pair, Token.TK_OPEN_PAREN);
-        currentNode.addChild(parseExpression());
+        pair = lexer.currentPair();
+        if (pair.getToken() != Token.TK_CLOSE_PAREN)
+            currentNode.addChild(parseExpression());
 
         pair = lexer.nextPair();
         while (pair.getToken() == Token.TK_COMMA) {
