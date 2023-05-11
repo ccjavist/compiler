@@ -112,16 +112,12 @@ public class SemanticAnalyzer {
      * @throws SemanticError if a semantic error is encountered during analysis.
      */
     private void analyzeClassDeclaration(ProgramTree node) throws SemanticError {
-        String className = null;
-        for (ProgramTree child : node.getChildren()) {
-            if (child.getValue() == SyntaxComponent.CLASS_NAME) {
-                className = ((TokenLexemaPair) child.getChild(0).getValue()).getLexema();
-                break;
-            }
-        }
-        if (className == null) {
+        // Get class name
+        Integer classNamePosition = findFirstInChildren(node, SyntaxComponent.CLASS_NAME);
+        if(classNamePosition == null) {
             throw new SemanticError(Constants.NO_CLASS_FOUND_ERROR, node.getLine(), node.getColumn());
         }
+        String className = ((TokenLexemaPair) node.getChild(classNamePosition).getChild(0).getValue()).getLexema();
 
         // analyze class body
         ProgramTree bodyNode = node.getChild(3);
