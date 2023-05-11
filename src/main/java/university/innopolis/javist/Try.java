@@ -9,10 +9,8 @@ import university.innopolis.javist.syntax.SyntaxAnalyser;
 public class Try {
 
     public static void main(String[] args) throws Exception {
-//         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test1.txt");
-         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test2.txt");
-//         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test3.txt");
-//         testSemanticAnalyzer("src/main/resources/sources/SemanticTests/Test4.txt");
+        testSemanticAnalyzer("src/main/resources/sources/Power.txt");
+        JVMByteCodeGenerator.run(new SyntaxAnalyser(new Lexer("src/main/resources/sources/Power.txt")).makeTree());
     }
 
     public static void testSyntaxAnalyser(String filePath) {

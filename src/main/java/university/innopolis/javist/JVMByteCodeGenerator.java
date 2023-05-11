@@ -73,7 +73,7 @@ public class JVMByteCodeGenerator {
         }
 
         mv.visitInsn(Opcodes.RETURN);
-        mv.visitMaxs(1, 1);
+        //mv.visitMaxs(0, 3);
         mv.visitEnd();
     }
 
@@ -213,6 +213,9 @@ public class JVMByteCodeGenerator {
     public static String getTypeDescriptorExpression(ProgramTree expression) throws Exception {
         if (expression.getChildrenCount() == 0) {
             if (expression.getValue() instanceof TokenLexemaPair) {
+                if(((TokenLexemaPair) expression.getValue()).getToken() == Token.TK_INTEGER) {
+                    return "Ljava/lang/Integer;";
+                }
                 return ((TokenLexemaPair) expression.getValue()).getLexema();
             }
             return "";
@@ -227,6 +230,8 @@ public class JVMByteCodeGenerator {
             return "L" + CLASS_NAME + ";";
         } else if (expression.getChild(0).getValue() instanceof TokenLexemaPair && ((TokenLexemaPair) expression.getChild(0).getValue()).getToken() == Token.TK_IDENTIFIER) {
             return "L" + ((TokenLexemaPair) expression.getChild(0).getValue()).getLexema() + ";";
+        } else if (expression.getChild(0).getValue() instanceof TokenLexemaPair && ((TokenLexemaPair) expression.getChild(0).getValue()).getToken() == Token.TK_INTEGER) {
+            return "Ljava/lang/Integer;";
         }
         return "V";
     }
