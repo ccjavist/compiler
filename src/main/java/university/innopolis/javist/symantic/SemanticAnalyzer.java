@@ -2,7 +2,6 @@ package university.innopolis.javist.symantic;
 
 import university.innopolis.javist.errors.Constants;
 import university.innopolis.javist.errors.SemanticError;
-import university.innopolis.javist.errors.SymbolNotFoundException;
 import university.innopolis.javist.lexer.Lexer;
 import university.innopolis.javist.lexer.Token;
 import university.innopolis.javist.symantic.symbol.*;
@@ -54,7 +53,7 @@ public class SemanticAnalyzer {
      */
     public void analyzePredefinedLibraries(String pathToPredefinedLibraries) {
         Lexer lexer = new Lexer(pathToPredefinedLibraries);
-        ProgramTree predefinedAST = new SyntaxAnalyser(lexer).makeTree();
+        ProgramTree predefinedAST = new SyntaxAnalyzer(lexer).makeTree();
         if (predefinedAST.getValue() == SyntaxComponent.PROGRAM) {
             analyzeProgram(predefinedAST);
         } else {

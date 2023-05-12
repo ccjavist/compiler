@@ -5,11 +5,11 @@ import university.innopolis.javist.errors.SyntaxError;
 import university.innopolis.javist.lexer.Lexer;
 import university.innopolis.javist.lexer.Token;
 
-public class SyntaxAnalyser {
+public class SyntaxAnalyzer {
     private final ProgramTree tree;
     private final Lexer lexer;
 
-    public SyntaxAnalyser(Lexer lexer) {
+    public SyntaxAnalyzer(Lexer lexer) {
         this.lexer = lexer;
         tree = new ProgramTree(SyntaxComponent.PROGRAM, 0, 0);
     }
