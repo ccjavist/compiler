@@ -21,4 +21,5 @@ public class Constants {
     public static final String INVALID_RETURN_STATEMENT = "Unexpected return statement of type %s, expected: %s";
     public static final String INVALID_LOOP_CONDITION = "Invalid loop condition, expected: Boolean, actual: %s";
     public static final String INVALID_IF_CONDITION = "Invalid if condition, expected: Boolean, actual: %s";
+    public static final String CONSTRUCTOR_ALREADY_EXISTS = "Constructor with following parameters is already exists";
 }

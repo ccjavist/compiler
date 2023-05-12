@@ -113,7 +113,7 @@ public class SemanticAnalyzer {
     private void analyzeClassDeclaration(ProgramTree node) throws SemanticError {
         // Get class name
         Integer classNamePosition = findFirstInChildren(node, SyntaxComponent.CLASS_NAME);
-        if(classNamePosition == null) {
+        if (classNamePosition == null) {
             throw new SemanticError(Constants.NO_CLASS_FOUND_ERROR, node.getLine(), node.getColumn());
         }
         String className = ((TokenLexemaPair) node.getChild(classNamePosition).getChild(0).getValue()).getLexema();
@@ -233,8 +233,27 @@ public class SemanticAnalyzer {
     private void analyzeConstructorDeclaration(ProgramTree node, String className) throws SemanticError {
         ProgramTree nameNode = node.getChild(0);
         TokenLexemaPair namePair = (TokenLexemaPair) nameNode.getValue();
+        Integer parametersPosition = findFirstInChildren(node, SyntaxComponent.PARAMETERS);
+
         String constructorName = namePair.getLexema();
-        // TODO: args reload
+        List<ParameterSymbol> parameters = parametersPosition != null ? analyzeParameters(node.getChild(parametersPosition))
+                : new ArrayList<>();
+        ClassSymbol classSymbol = (ClassSymbol) symbolTable.get(className);
+        if(classSymbol.isConstructorExists(parameters)){
+            throw new SemanticError(Constants.CONSTRUCTOR_ALREADY_EXISTS, namePair.getLine(), namePair.getPosition());
+        }
+        ConstructorSymbol constr = new ConstructorSymbol(parameters);
+        classSymbol.getConstructors().add(constr);
+
+        // analyze statements
+        Integer statementsPosition = findFirstInChildren(node, SyntaxComponent.STATEMENTS);
+        if (statementsPosition != null) {
+            Scope scope = new Scope();
+            for (ParameterSymbol parameter : parameters) {
+                scope.put(parameter.getName(), new VariableSymbol(parameter.getName(), parameter.getType()));
+            }
+            analyzeStatements(node.getChild(statementsPosition), className, scope, null);
+        }
     }
 
     /**
@@ -282,37 +301,37 @@ public class SemanticAnalyzer {
 
             }
 
-            if(statement.getChild(0).getValue() == SyntaxComponent.WHILE_LOOP){
+            if (statement.getChild(0).getValue() == SyntaxComponent.WHILE_LOOP) {
                 analyzeLoop(statement.getChild(0), className, scope, methodSymbol);
             }
 
-            if(statement.getChild(0).getValue() == SyntaxComponent.IF_STATEMENT){
+            if (statement.getChild(0).getValue() == SyntaxComponent.IF_STATEMENT) {
                 analyzeIf(statement.getChild(0), className, scope, methodSymbol);
             }
         }
     }
 
-    private void analyzeLoop(ProgramTree node, String className, Scope scope, MethodSymbol methodSymbol){
+    private void analyzeLoop(ProgramTree node, String className, Scope scope, MethodSymbol methodSymbol) {
         scope = new Scope(scope);
         ProgramTree condition = node.getChild(1);
         String type = parseExpression(condition.getChildren(), className, scope, null);
-        if(!type.equals("Boolean")){
+        if (!type.equals("Boolean")) {
             throw new SemanticError(String.format(Constants.INVALID_LOOP_CONDITION, type),
                     condition.getLine(), condition.getColumn());
         }
         analyzeStatements(node.getChild(3), className, scope, methodSymbol);
     }
 
-    private void analyzeIf (ProgramTree node, String className, Scope scope, MethodSymbol methodSymbol){
+    private void analyzeIf(ProgramTree node, String className, Scope scope, MethodSymbol methodSymbol) {
         Scope ifScope = new Scope(scope);
         ProgramTree condition = node.getChild(1);
         String type = parseExpression(condition.getChildren(), className, scope, null);
-        if(!type.equals("Boolean")){
+        if (!type.equals("Boolean")) {
             throw new SemanticError(String.format(Constants.INVALID_IF_CONDITION, type),
                     condition.getLine(), condition.getColumn());
         }
         analyzeStatements(node.getChild(3), className, ifScope, methodSymbol);
-        if(node.getChildrenCount() >= 6 && node.getChild(5).getValue() == SyntaxComponent.STATEMENTS) {
+        if (node.getChildrenCount() >= 6 && node.getChild(5).getValue() == SyntaxComponent.STATEMENTS) {
             Scope elseScope = new Scope(scope);
             analyzeStatements(node.getChild(5), className, elseScope, methodSymbol);
         }
@@ -339,7 +358,7 @@ public class SemanticAnalyzer {
         if (expressionPosition != null) {
             type = parseExpression(node.getChild(expressionPosition).getChildren(), className, scope, null);
         }
-        // TODO: analyze all kinds of expressions
+
         return new VariableSymbol(variableName, type);
     }
 

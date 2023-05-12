@@ -9,10 +9,15 @@ import java.util.Objects;
 @Getter
 public class ConstructorSymbol extends Symbol {
 
-    private final List<ParameterSymbol> parameters;
+    @Getter
+    protected final List<ParameterSymbol> parameters;
 
     public ConstructorSymbol(List<ParameterSymbol> parameters) {
         super(null);
+        this.parameters = parameters;
+    }
+    public ConstructorSymbol(String name, List<ParameterSymbol> parameters) {
+        super(name);
         this.parameters = parameters;
     }
 

@@ -6,22 +6,19 @@ import university.innopolis.javist.symantic.Scope;
 import java.util.List;
 
 
-public class MethodSymbol extends Symbol {
+public class MethodSymbol extends ConstructorSymbol {
 
     @Getter
     private final String returnType;
 
-    @Getter
-    private final List<ParameterSymbol> parameters;
 
     @Getter
     private final Scope scope = new Scope();
 
 
     public MethodSymbol(String name, String returnType, List<ParameterSymbol> parameters) {
-        super(name);
+        super(name, parameters);
         this.returnType = returnType;
-        this.parameters = parameters;
     }
 
     public boolean equals(String name, List<ParameterSymbol> parameters) {
