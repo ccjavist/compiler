@@ -474,6 +474,11 @@ public class SyntaxAnalyzer {
         currentNode.setLine(pair.getLine());
         currentNode.setColumn(pair.getPosition());
 
+        if(pair.getToken() == Token.TK_OPEN_PAREN) {
+            currentNode.addChild(parseArguments());
+            return currentNode;
+        }
+
         while (pair.getToken() == Token.TK_DOT) {
             pair = lexer.nextPair();
             checkToken(currentNode, pair, Token.TK_DOT);
