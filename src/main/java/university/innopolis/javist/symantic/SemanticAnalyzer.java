@@ -427,6 +427,7 @@ public class SemanticAnalyzer {
                 case TK_BOOLEAN_LITERAL -> "Boolean";
                 case TK_INTEGER_LITERAL -> "Integer";
                 case TK_REAL_LITERAL -> "Real";
+                case TK_THIS -> className;
                 default -> null;
             };
             if (literalType != null) {
