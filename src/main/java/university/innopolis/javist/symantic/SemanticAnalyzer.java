@@ -187,19 +187,22 @@ public class SemanticAnalyzer {
      * @throws SemanticError if a semantic error is encountered during analysis.
      */
     private void analyzeMethodDeclaration(ProgramTree node, String className) throws SemanticError {
+        // Get positions for method key description
         Integer nameNodePosition = findFirstInChildren(node, Token.TK_IDENTIFIER);
         Integer closeParenPosition = findFirstInChildren(node, Token.TK_CLOSE_PAREN);
         Integer parametersPosition = findFirstInChildren(node, SyntaxComponent.PARAMETERS);
         Integer isPosition = findFirstInChildren(node, Token.TK_IS);
-        List<ParameterSymbol> parameters;
-        if (nameNodePosition == null) {
-            throw new SemanticError(Constants.METHOD_SHOULD_HAVE_NAME, node.getLine(), node.getColumn());
-        }
-        String methodName = ((TokenLexemaPair) node.getChild(nameNodePosition).getValue()).getLexema();
-        String returnType = null;
+
         assert closeParenPosition != null;
         assert isPosition != null;
+        assert nameNodePosition != null;
+
+        List<ParameterSymbol> parameters;
+        String methodName = ((TokenLexemaPair) node.getChild(nameNodePosition).getValue()).getLexema();
+        String returnType = null;
+
         if (isPosition - closeParenPosition > 1) {
+            // Not void method
             returnType = ((TokenLexemaPair) node.getChild(isPosition - 1).getValue()).getLexema();
         }
         if (symbolTable.get(returnType) == null) {
@@ -246,10 +249,12 @@ public class SemanticAnalyzer {
     private void analyzeStatements(ProgramTree node, String className, Scope scope, MethodSymbol methodSymbol) {
         ClassSymbol classSymbol = (ClassSymbol) symbolTable.get(className);
         for (ProgramTree statement : node.getChildren()) {
+
             if (statement.getChild(0).getValue() == SyntaxComponent.VARIABLE_DECLARATION) {
                 VariableSymbol variableSymbol = analyzeVariableInScope(statement.getChild(0), className, scope);
                 scope.put(variableSymbol.getName(), variableSymbol);
             }
+
             if (statement.getChild(0).getValue() == SyntaxComponent.ASSIGNMENT) {
                 VariableSymbol variableSymbol = analyzeAssigmentInScope(statement.getChild(0), className, scope);
                 VariableSymbol originalVariable = (VariableSymbol) scope.variableLookup(variableSymbol.getName());
@@ -266,6 +271,7 @@ public class SemanticAnalyzer {
                             statement.getLine(), statement.getColumn());
                 }
             }
+
             if (statement.getChild(0).getValue() == SyntaxComponent.RETURN_STATEMENT) {
                 String type = parseExpression(statement.getChild(0).getChild(1).getChildren(), className, scope, null);
                 if ((methodSymbol.getReturnType() == null && type != null) ||
@@ -276,7 +282,22 @@ public class SemanticAnalyzer {
                 }
 
             }
+
+            if(statement.getChild(0).getValue() == SyntaxComponent.WHILE_LOOP){
+                analyzeLoop(statement.getChild(0), className, scope, methodSymbol);
+            }
         }
+    }
+
+    private void analyzeLoop(ProgramTree node, String className, Scope scope, MethodSymbol methodSymbol){
+        scope = new Scope(scope);
+        ProgramTree condition = node.getChild(1);
+        String type = parseExpression(condition.getChildren(), className, scope, null);
+        if(!type.equals("Boolean")){
+            throw new SemanticError(String.format(Constants.INVALID_LOOP_CONDITION, type),
+                    condition.getLine(), condition.getColumn());
+        }
+        analyzeStatements(node.getChild(3), className, scope, methodSymbol);
     }
 
     /**

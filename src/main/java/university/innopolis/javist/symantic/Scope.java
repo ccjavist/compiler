@@ -18,7 +18,7 @@ public class Scope {
     private final Scope parentScope;
 
     public Scope(Scope scope) {
-        this.level = scope.getLevel();
+        this.level = scope.getLevel()+1;
         this.variables = new HashMap<>();
         this.parentScope = scope;
     }
