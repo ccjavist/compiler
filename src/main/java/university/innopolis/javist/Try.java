@@ -9,16 +9,25 @@ import university.innopolis.javist.syntax.SyntaxAnalyzer;
 public class Try {
 
     public static void main(String[] args) throws Exception {
-        testLexer("src/main/resources/sources/Power.txt");
-        testSyntaxAnalyzer("src/main/resources/sources/Power.txt");
-        testSemanticAnalyzer("src/main/resources/sources/Power.txt");
-        JVMByteCodeGenerator.run(new SyntaxAnalyzer(new Lexer("src/main/resources/sources/Power.txt")).makeTree());
+        testLexer("src/main/resources/sources/lexerTests/CorrectTestCodeLexer.txt");
+        testLexer("src/main/resources/sources/lexerTests/WrongTestCodeLexer.txt");
+
+        testSyntaxAnalyzer("src/main/resources/sources/syntaxTests/WrongTestCodeSyntax.txt");
+        testSyntaxAnalyzer("src/main/resources/sources/syntaxTests/CorrectTestCodeSyntax.txt");
+
+        testSemanticAnalyzer("src/main/resources/sources/SemanticTests/CorrectTestCodeSemantic.txt");
+        testSemanticAnalyzer("src/main/resources/sources/SemanticTests/WrongTestCodeSemantic.txt");
     }
 
     public static void testSyntaxAnalyzer(String filePath) {
-        var lexer = new Lexer(filePath);
-        var syntaxAnalyser = new SyntaxAnalyzer(lexer);
-        printAST(syntaxAnalyser.makeTree(), 0);
+        try {
+            var lexer = new Lexer(filePath);
+            var syntaxAnalyser = new SyntaxAnalyzer(lexer);
+            printAST(syntaxAnalyser.makeTree(), 0);
+        } catch (SyntaxError e) {
+            System.out.println("SyntaxError: " + e.getMessage());
+        }
+
     }
 
     public static void testSemanticAnalyzer(String filepath) throws Exception {
@@ -35,7 +44,6 @@ public class Try {
         }
         semanticAnalyzer.analyzePredefinedLibraries("src/main/resources/sources/Libraries.txt");
         semanticAnalyzer.analyze();
-        JVMByteCodeGenerator.run(tree);
     }
 
     public static void printAST(ProgramTree node, int depth) {
