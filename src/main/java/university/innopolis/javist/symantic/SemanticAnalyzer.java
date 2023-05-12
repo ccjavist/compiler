@@ -305,14 +305,18 @@ public class SemanticAnalyzer {
     }
 
     private void analyzeIf (ProgramTree node, String className, Scope scope, MethodSymbol methodSymbol){
-        scope = new Scope(scope);
+        Scope ifScope = new Scope(scope);
         ProgramTree condition = node.getChild(1);
         String type = parseExpression(condition.getChildren(), className, scope, null);
         if(!type.equals("Boolean")){
             throw new SemanticError(String.format(Constants.INVALID_IF_CONDITION, type),
                     condition.getLine(), condition.getColumn());
         }
-        analyzeStatements(node.getChild(3), className, scope, methodSymbol);
+        analyzeStatements(node.getChild(3), className, ifScope, methodSymbol);
+        if(node.getChildrenCount() >= 6 && node.getChild(5).getValue() == SyntaxComponent.STATEMENTS) {
+            Scope elseScope = new Scope(scope);
+            analyzeStatements(node.getChild(5), className, elseScope, methodSymbol);
+        }
     }
 
     /**
