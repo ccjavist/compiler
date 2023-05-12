@@ -286,6 +286,10 @@ public class SemanticAnalyzer {
             if(statement.getChild(0).getValue() == SyntaxComponent.WHILE_LOOP){
                 analyzeLoop(statement.getChild(0), className, scope, methodSymbol);
             }
+
+            if(statement.getChild(0).getValue() == SyntaxComponent.IF_STATEMENT){
+                analyzeIf(statement.getChild(0), className, scope, methodSymbol);
+            }
         }
     }
 
@@ -295,6 +299,17 @@ public class SemanticAnalyzer {
         String type = parseExpression(condition.getChildren(), className, scope, null);
         if(!type.equals("Boolean")){
             throw new SemanticError(String.format(Constants.INVALID_LOOP_CONDITION, type),
+                    condition.getLine(), condition.getColumn());
+        }
+        analyzeStatements(node.getChild(3), className, scope, methodSymbol);
+    }
+
+    private void analyzeIf (ProgramTree node, String className, Scope scope, MethodSymbol methodSymbol){
+        scope = new Scope(scope);
+        ProgramTree condition = node.getChild(1);
+        String type = parseExpression(condition.getChildren(), className, scope, null);
+        if(!type.equals("Boolean")){
+            throw new SemanticError(String.format(Constants.INVALID_IF_CONDITION, type),
                     condition.getLine(), condition.getColumn());
         }
         analyzeStatements(node.getChild(3), className, scope, methodSymbol);
