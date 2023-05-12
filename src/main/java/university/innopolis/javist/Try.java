@@ -26,7 +26,7 @@ public class Try {
         tree =  new SyntaxAnalyser(lexer).makeTree();
         SemanticAnalyzer semanticAnalyzer;
         try{
-            semanticAnalyzer = new SemanticAnalyzer(syntaxAnalyser.makeTree());
+            semanticAnalyzer = new SemanticAnalyzer(tree);
         } catch (SyntaxError e){
             System.out.println("SyntaxError: " + e.getMessage());
             return;

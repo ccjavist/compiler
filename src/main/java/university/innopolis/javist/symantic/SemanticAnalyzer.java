@@ -26,7 +26,7 @@ public class SemanticAnalyzer {
      * @param root The root of the program tree to be analyzed.
      */
     public SemanticAnalyzer(ProgramTree root) {
-        this.root = root;
+        this.root = root.clone();
     }
 
     /**
