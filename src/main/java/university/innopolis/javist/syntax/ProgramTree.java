@@ -65,4 +65,14 @@ public class ProgramTree {
             result.append("INVALID_NODE ");
         return result.toString();
     }
+
+    public ProgramTree clone(){
+        ProgramTree clone = new ProgramTree(value, line, column);
+
+        for (int i = 0; i < children.size(); i++) {
+            clone.children.add(children.get(i).clone());
+        }
+
+        return clone;
+    }
 }
